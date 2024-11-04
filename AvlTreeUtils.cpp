@@ -1,4 +1,17 @@
-#include "OSAP_001_T1_source.h"
+#include "OSAP_002_T6_source.h"
+
+AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
+    if (head == nullptr || head -> data == find_data){
+      return head;
+    }
+
+    if (find_data < head -> data){
+      NodeFindByValue(head -> left, find_data);
+    }
+    if (find_data > head -> data){
+      NodeFindByValue(head -> right, find_data);
+    }
+}
 
 //특정 노드의 균형인수 계산
 int AvlTree::CalculateBalanceFactor(Node* node){
