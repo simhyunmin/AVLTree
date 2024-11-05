@@ -15,17 +15,17 @@ AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
 
 //특정 노드의 균형인수 계산
 int AvlTree::CalculateBalanceFactor(Node* node){
-  return GetSubTreeHeight(node -> left) - GetSubTreeHeight(node -> right);
+  return (node -> left -> height) - (node -> right -> height);
 }
 
-//특정 노드의 높이를 구하는 함수
-int AvlTree::GetSubTreeHeight(Node* node){
-  if (node == nullptr){
-    return -1;
-  }
+//특정 노드의 높이를 구하는 함수 : node -> height로 접근하면 되기에 주석 처리
+// int AvlTree::GetSubTreeHeight(Node* node){
+//   if (node == nullptr){
+//     return -1;
+//   }
 
-  return std::max(GetSubTreeHeight(node -> left), GetSubTreeHeight(node -> right)) + 1;
-} 
+//   return std::max(GetSubTreeHeight(node -> left), GetSubTreeHeight(node -> right)) + 1;
+// } 
 
 // 특정 노드를 기준으로 부모 노드를 거슬러 올라가면서 불균형인 노드를 찾는 함수
 AvlTree::Node* AvlTree::FindUnbalancedNode (Node* node){

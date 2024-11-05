@@ -3,11 +3,13 @@
 
 #include <iostream>
 #include <algorithm>
+#include <String>
+#include <vector>
 using namespace std;
 
 class AvlTree {
 public:
-  AvlTree() : head(nullptr), node_count_(0){};
+  AvlTree() : root(nullptr), node_count_(0){};
   ~AvlTree();
      
   struct Node {
@@ -30,7 +32,7 @@ public:
   int Height() ;                 
   int Ancestor(int x);                
   double Average(int x);            
-  int Rank(int x);                    
+  void Rank(int x);                    
   int Erase(int x);   
     
   //rotate 관련 함수
@@ -47,13 +49,18 @@ public:
   //불균형인 노드를 기준으로 유형에 맞는 rotate 함수를 호출해주는 함수
   Node* AvlSet(Node* node);
 
-//특정 노드를 값에 의해 찾고 반환해주는 함수
+  //특정 노드를 값에 의해 찾고 반환해주는 함수
   Node* NodeFindByValue(Node* head, int value);
 
+  //특정 노드 중위 순회하면서 rank 반환해주는 함수
+  int InorderTraversalByValue(Node* node, int x);
+  
   int node_count_; 
+  int node_rank_count_;
+
 
 private:
-  Node* head = nullptr;  //루트 노드를 가리키는 포인터
+  Node* root = nullptr;  //루트 노드를 가리키는 포인터
 
 };
 
