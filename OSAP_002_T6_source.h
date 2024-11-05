@@ -53,10 +53,10 @@ public:
   Node* NodeFindByValue(Node* head, int value);
 
   //특정 노드 중위 순회하면서 rank 반환해주는 함수
-  int InorderTraversalByValue(Node* node, int x);
+  // int InorderTraversalByValue(Node* node, int x);
   
   int node_count_; 
-  int node_rank_count_;
+  // int node_rank_count_;
 
 
 private:
