@@ -29,11 +29,17 @@ public:
   int Insert(int x);                
   int Empty() ;                 
   int Size() ;                  
-  int Height() const;                 
+  void Height() const;                 
   void Ancestor(int x) const;                
   double Average(int x);            
   void Rank(int x);                    
   int Erase(int x);   
+
+  //x 값보다 작은 값을 가진 노드 수 + 1 값 반환
+  int RankSearch(int x);
+
+  //특정 노드를 값에 의해 찾고 반환해주는 함수
+  Node* NodeFindByValue(Node* head, int value);
     
   //rotate 관련 함수
   int CalculateBalanceFactor(Node* node); //특정 노드의 균형인수 계산
