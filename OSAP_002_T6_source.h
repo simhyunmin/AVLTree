@@ -23,22 +23,26 @@ public:
     Node(int data_, int depth_ = 0) : data(data_), height(0), depth(depth_), left(nullptr), right(nullptr), parent(nullptr) {}
   };
 
-
-   
   int Find(int x) ;                    
   int Insert(int x);                
   int Empty() ;                 
   int Size() ;                  
-  int Height() ;                 
+  void Height() const;                 
   int Ancestor(int x);                
   double Average(int x);            
   void Rank(int x);                    
   int Erase(int x);   
-    
+
+  //x 값보다 작은 값을 가진 노드 수 + 1 값 반환
+  int RankSearch(int x);
+
+  //특정 노드를 값에 의해 찾고 반환해주는 함수
+  Node* NodeFindByValue(Node* head, int value);
+
   //rotate 관련 함수
   int CalculateBalanceFactor(Node* node); //특정 노드의 균형인수 계산
-  int GetSubTreeHeight(Node* node); //특정 노드를 기준으로 서브 트리의 높이를 구하는 함수
   Node* FindUnbalancedNode (Node* node); // 특정 노드를 기준으로 부모 노드를 거슬러 올라가면서 불균형인 노드를 찾는 함수
+  // int GetSubTreeHeight(Node* node); //특정 노드를 기준으로 서브 트리의 높이를 구하는 함수
 
   //불균형인 노드를 rotate 해주는 함수
   Node* RR(Node* node); 
@@ -49,15 +53,7 @@ public:
   //불균형인 노드를 기준으로 유형에 맞는 rotate 함수를 호출해주는 함수
   Node* AvlSet(Node* node);
 
-  //특정 노드를 값에 의해 찾고 반환해주는 함수
-  Node* NodeFindByValue(Node* head, int value);
-
-  //특정 노드 중위 순회하면서 rank 반환해주는 함수
-  // int InorderTraversalByValue(Node* node, int x);
-  
   int node_count_; 
-  // int node_rank_count_;
-
 
 private:
   Node* root = nullptr;  //루트 노드를 가리키는 포인터

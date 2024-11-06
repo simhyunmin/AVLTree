@@ -1,5 +1,9 @@
 #include "OSAP_002_T6_source.h"
 
+ AvlTree::~AvlTree() {
+  cout << "AvlTree 종료" << endl;
+ }
+
 AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
     if (head == nullptr || head -> data == find_data){
       return head;
