@@ -3,7 +3,7 @@
 int GetPathToRootSum(AvlTree::Node *); // 부모 노드로 거슬러 올라가며 key값 더하는 함수
 
 
-void AvlTree::Ancestor(int x) const{  
+void AvlTree::Ancestor(int x){  
   Node *node = NodeFindByValue(root, x);
   
   int depth = node->depth;
