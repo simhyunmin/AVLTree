@@ -4,7 +4,7 @@
   cout << "AvlTree 종료" << endl;
  }
 
-AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data) const{
+AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
     if (head == nullptr || head -> data == find_data){
       return head;
     }
