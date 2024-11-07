@@ -28,7 +28,7 @@ public:
   int Empty() ;                 
   int Size() ;                  
   void Height() const;                 
-  int Ancestor(int x);                
+  void Ancestor(int x) const;                
   double Average(int x);            
   void Rank(int x);                    
   int Erase(int x);   
@@ -54,7 +54,7 @@ public:
   Node* AvlSet(Node* node);
 
   int node_count_; 
-
+  
 private:
   Node* root = nullptr;  //루트 노드를 가리키는 포인터
 
