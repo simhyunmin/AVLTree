@@ -25,11 +25,13 @@ public:
 
   int Find(int x) ;                    
   int Insert(int x);                
-  int Empty() ;                 
+  void Empty() {
+    cout <<  ( ( root == nullptr ) ? 1 : 0 ) << "\n";
+  }               
   int Size() ;                  
   void Height() const;                 
   int Ancestor(int x);                
-  double Average(int x);            
+  double Average(Node* node);            
   void Rank(int x);                    
   int Erase(int x);   
 
