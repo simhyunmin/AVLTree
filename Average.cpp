@@ -2,6 +2,9 @@
 //노드 𝑥가 루트인 부분트리에서 노드들의 key 값의 최솟값(𝑎)와 최댓값(𝑏)의 산술평균((𝑎 + 𝑏)/2)을 출력한다.
 double AvlTree::Average(int x) { 
   Node* sub_tree_root = NodeFindByValue(root, x);
+  if (sub_tree_root == nullptr) {
+        return 0; 
+  }
 
   Node* min_node = sub_tree_root;
   while (min_node -> left != NULL) {
