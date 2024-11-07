@@ -31,7 +31,7 @@ public:
   int Size() ;                  
   void Height() const;                 
   int Ancestor(int x);                
-  double Average(Node* node);            
+  double Average(int x);            
   void Rank(int x);                    
   int Erase(int x);   
 
