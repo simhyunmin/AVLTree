@@ -23,7 +23,7 @@ public:
     Node(int data_, int depth_ = 0) : data(data_), height(0), depth(depth_), left(nullptr), right(nullptr), parent(nullptr) {}
   };
 
-  int Find(int x) ;                    
+  void Find(int x);                    
   int Insert(int x);                
   int Empty() ;                 
   int Size() ;                  
