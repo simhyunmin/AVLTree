@@ -60,10 +60,6 @@ public:
   int node_count_; 
   // int node_rank_count_;
 
-  int UpdateDepth(Node *node); // 특정 노드에 대해 Depth 업데이트 하는 함수
-  int UpdateHeight(Node *node);  // 특정 노드에 대해 Height 업데이트 하는 함수
-
-  int GetPathToRootSum(Node *node) const; // 특정 노드부터 루트까지의 경로의 노드들의 key 값들의 합을 구하는 함수 
 private:
   Node* root = nullptr;  //루트 노드를 가리키는 포인터
 
