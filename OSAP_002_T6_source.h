@@ -24,14 +24,17 @@ public:
   };
 
   void Find(int x);                    
-  int Insert(int x);                
+  void Insert(int x);                
   int Empty() ;                 
-  int Size() ;                  
+  void Size() const;                  
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
   void Rank(int x);                    
-  int Erase(int x);   
+  int Erase(int x);
+
+  //x를 삽입하는 함수
+  Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth = 0);   
 
   //x 값보다 작은 값을 가진 노드 수 + 1 값 반환
   int RankSearch(int x);
