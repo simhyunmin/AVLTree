@@ -25,7 +25,9 @@ public:
 
   int Find(int x) ;                    
   int Insert(int x);                
-  int Empty() ;                 
+  void Empty() {
+    cout <<  ( ( root == nullptr ) ? 1 : 0 ) << "\n";
+  }               
   int Size() ;                  
   void Height() const;                 
   void Ancestor(int x);                
