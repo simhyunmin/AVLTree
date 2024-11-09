@@ -26,7 +26,7 @@ public:
   void Find(int x);                    
   int Insert(int x);                
   int Empty() ;                 
-  int Size() ;                  
+  void Size() const;                  
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
