@@ -1,8 +1,6 @@
 #include "OSAP_002_T6_source.h"
 
 AvlTree::Node* AvlTree::InsertNode(Node* node, int x, int& depth_height_sum, int depth) {
-    int height = node->height;
-    int depth = node->depth;
     
     if(!node) {
         node_count_++;
