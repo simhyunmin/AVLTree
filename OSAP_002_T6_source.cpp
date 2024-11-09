@@ -21,14 +21,14 @@ public:
     Node(int data_, int depth_ = 0) : data(data_), height(0), depth(depth_), left(nullptr), right(nullptr), parent(nullptr) {}
   };
 
-  int Find(int x) ;                    
-  int Insert(int x);                
+  int Find(int x) ;                                    
   int Empty() ;                 
-  int Size() ;                  
+  void Size() const;                  
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
-  void Rank(int x);                    
+  void Rank(int x);
+  void Insert(int x);                    
   int Erase(int x);
   
   Node* getroot(){return root;}
