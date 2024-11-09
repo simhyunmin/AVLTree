@@ -28,7 +28,11 @@ int AvlTree::RankSearch(int find_value){
 
 //루트 기준 오른쪽 서브트리 탐색
 int RankRootRightSearch(AvlTree::Node* node, int find_value){
-  if(node -> data == find_value) {
+  if (node == nullptr) {
+    return 0;
+  }
+
+  if (node -> data == find_value) {
       return 1;
   }
 
@@ -45,6 +49,9 @@ int RankRootEqualSearch(AvlTree::Node* node){
 
 //루트 기준 왼쪽 서브트리 탐색
 int RankRootLeftSearch(AvlTree::Node* node, int find_value){
+  if (node == nullptr) {
+    return 0;
+  }
   if (node -> data == find_value) {
     return 1;
   }
