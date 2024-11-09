@@ -2,10 +2,5 @@
 
 void AvlTree::Find(int x) {
   Node *node = NodeFindByValue(root, x);
-
-  if (node != nullptr) {
-    cout << node->depth + node->height << "\n";
-    return;
-  }
-  cout << "0" << "\n";
+  cout << ((node != nullptr) ? node->depth + node->height : 0) << "\n";
 }
