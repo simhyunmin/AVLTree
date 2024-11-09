@@ -23,15 +23,18 @@ public:
     Node(int data_, int depth_ = 0) : data(data_), height(0), depth(depth_), left(nullptr), right(nullptr), parent(nullptr) {}
   };
 
-  void Find(int x);                    
-  int Insert(int x);                
+  void Find(int x);                
   int Empty() ;                 
-  int Size() ;                  
+  void Size() const;                  
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
-  void Rank(int x);                    
-  int Erase(int x);   
+  void Rank(int x);
+  void Insert(int x);                    
+  int Erase(int x);
+
+  //x를 삽입하는 함수
+  Node* InsertNode(Node* node, int x);   
 
   //x 값보다 작은 값을 가진 노드 수 + 1 값 반환
   int RankSearch(int x);
