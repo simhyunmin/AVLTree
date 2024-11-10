@@ -30,7 +30,7 @@ public:
     cout <<  ( ( root == nullptr ) ? 1 : 0 ) << "\n";
   }
   //set에 저장된 원소의 수를 출력한다
-  void AvlTree::Size() const{
+  void Size() const{
     cout << node_count_ << endl;
   }                 
   void Height() const;                 
