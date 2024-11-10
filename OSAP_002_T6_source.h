@@ -24,20 +24,29 @@ public:
   };
 
   void Find(int x);                    
-  int Insert(int x);                
+  void Insert(int x);                
   int Empty() ;                 
-  int Size() ;                  
+  void Size() const;                  
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
   void Rank(int x);                    
-  int Erase(int x);   
+  void Erase(int x);   
+
+  //x를 삽입하는 함수
+  Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth = 0);
+
+  //x에 해당하는 노드를 삭제하는 함수
+  Node* EraseNode(Node* node, int x);
 
   //x 값보다 작은 값을 가진 노드 수 + 1 값 반환
   int RankSearch(int x);
 
   //특정 노드를 값에 의해 찾고 반환해주는 함수
   Node* NodeFindByValue(Node* node, int value);
+
+  //최솟값을 찾는 함수
+  Node* minValueNode(Node* node);
 
   //rotate 관련 함수
   int CalculateBalanceFactor(Node* node); //특정 노드의 균형인수 계산

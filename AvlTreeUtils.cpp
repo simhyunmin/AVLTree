@@ -17,6 +17,15 @@ AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
     }
 }
 
+//최솟값을 구하는 함수
+AvlTree::Node* AvlTree::minValueNode(Node* node){
+  Node* temp = node;
+  while (temp && temp->left != nullptr){
+    temp = temp->left;
+  }
+  return temp;
+}
+
 //특정 노드의 균형인수 계산
 int AvlTree::CalculateBalanceFactor(Node* node){
   return (node -> left -> height) - (node -> right -> height);
