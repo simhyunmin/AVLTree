@@ -59,11 +59,10 @@ public:
   //불균형인 노드를 기준으로 유형에 맞는 rotate 함수를 호출해주는 함수
   Node* AvlSet(Node* node);
 
-  int node_count_; 
   
 private:
   Node* root = nullptr;  //루트 노드를 가리키는 포인터
-
+  int node_count_; //트리의 노드수
 };
 
 #endif
