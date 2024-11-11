@@ -84,6 +84,59 @@ int main() {
     cin.tie(nullptr);
     cout.tie(nullptr);
 
+    int T;
+    cin >> T;
+    
+    while(T--){
+      int Q;
+      cin >> Q;
+      cin.ignore();
+
+      for (int i = 0 ; i < Q ; ++i){
+        string command;
+        cin >> command;
+
+        AvlTree avl_tree;
+
+        if (command == "Empty") {
+                avl_tree.Empty();
+            } else if (command == "Size") {
+                avl_tree.Size();
+            } else if (command == "Height") {
+                avl_tree.Height();
+            } else if (command == "Insert") {
+                int x;
+                cin >> x;
+                avl_tree.Insert(x);
+                // cout << avl_tree.Find(x) << endl; // 삽입 후 깊이와 높이의 합 출력
+            } else if (command == "Find") {
+                int x;
+                cin >> x;
+                cout << avl_tree.Find(x) << endl; // 노드의 깊이와 높이의 합 출력
+            } else if (command == "Ancestor") {
+                int x;
+                cin >> x;
+                avl_tree.Ancestor(x); // 조상 출력
+            } else if (command == "Average") {
+                int x;
+                cin >> x;
+                avl_tree.Average(x); // 평균 출력
+            } else if (command == "Rank") {
+                int x;
+                cin >> x;
+                avl_tree.Rank(x);
+            } else if (command == "Erase") {
+                int x;
+                cin >> x;
+                avl_tree.Erase(x);
+            }
+
+
+        
+
+      }
+    }
+
 
     
     return 0;
@@ -116,10 +169,12 @@ AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* root, int find_data)
     }
 
     if (find_data < root -> data){
-      NodeFindByValue(root -> left, find_data);
+      return NodeFindByValue(root -> left, find_data);
     }
-    if (find_data > root -> data){
-      NodeFindByValue(root -> right, find_data);
+    else if (find_data > root -> data){
+      return NodeFindByValue(root -> right, find_data);
+    } else{
+      return root;
     }
 }
 
@@ -151,7 +206,8 @@ AvlTree::Node* AvlRotateUtils::AvlSet(AvlTree::Node* current_node){
   if (parent_balance_factor < -1 && right_child_balance_factor > 0) {
     return RL(parent);   //RL
   }
-    
+
+  return;
 }
 
 AvlTree::Node* AvlRotateUtils::FindUnbalancedNode (AvlTree::Node* node){
