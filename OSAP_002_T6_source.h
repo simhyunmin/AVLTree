@@ -23,10 +23,16 @@ public:
     Node(int data_, int depth_ = 0) : data(data_), height(0), depth(depth_), left(nullptr), right(nullptr), parent(nullptr) {}
   };
 
-  int Find(int x) ;                    
+  void Find(int x);                    
   int Insert(int x);                
-  int Empty() ;                 
-  int Size() ;                  
+  // set이 비어 있다면 1을, 아니면 0을 출력한다.
+  void Empty() {
+    cout <<  ( ( root == nullptr ) ? 1 : 0 ) << "\n";
+  }
+  //set에 저장된 원소의 수를 출력한다
+  void Size() const{
+    cout << node_count_ << endl;
+  }                 
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
@@ -53,11 +59,10 @@ public:
   //불균형인 노드를 기준으로 유형에 맞는 rotate 함수를 호출해주는 함수
   Node* AvlSet(Node* node);
 
-  int node_count_; 
   
 private:
   Node* root = nullptr;  //루트 노드를 가리키는 포인터
-
+  int node_count_; //트리의 노드수
 };
 
 #endif

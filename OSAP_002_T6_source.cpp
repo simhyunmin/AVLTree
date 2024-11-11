@@ -23,8 +23,14 @@ public:
 
   int Find(int x) ;                    
   int Insert(int x);                
-  int Empty() ;                 
-  int Size() ;                  
+  // set이 비어 있다면 1을, 아니면 0을 출력한다.
+  void Empty() {
+    cout <<  ( ( root == nullptr ) ? 1 : 0 ) << "\n";
+  }
+  //set에 저장된 원소의 수를 출력한다
+  void Size() const{
+    cout << node_count_ << endl;
+  }                            
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
@@ -35,6 +41,7 @@ public:
 
 private:
   Node* root = nullptr;  //루트 노드를 가리키는 포인터
+  int node_count_; //트리의 노드수
 };
 
 
@@ -323,5 +330,3 @@ int RankUtils::RankRootLeftSearch(AvlTree::Node* node, int find_value){
 }
 
 //Height, Rank 함수 및 필요한 외부 함수 main.cpp 추가 완료 
-
-
