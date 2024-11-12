@@ -17,6 +17,14 @@ AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
     }
 }
 
+AvlTree::Node* AvlTree::MinValueNode(Node* node){
+  Node* temp = node;
+  while (temp && temp->left != nullptr){
+    temp = temp->left;
+  }
+  return temp;
+}
+
 //특정 노드의 균형인수 계산
 int AvlTree::CalculateBalanceFactor(Node* node){
   return (node -> left -> height) - (node -> right -> height);
@@ -43,9 +51,35 @@ AvlTree::Node* AvlTree::FindUnbalancedNode (Node* node){
   }
 
   return FindUnbalancedNode(node -> parent);
-} 
+}
 
 //불균형인 노드를 rotate 해주는 함수
+AvlTree::Node* AvlTree::RightRotate(Node* y){
+  Node* x = y->left;
+  Node* temp = x->right;
+
+  x->right = y;
+  y->left = temp;
+
+  y->height = max(y->left->height, y->right->height) + 1;
+  x->height = max(x->left->height, x->right->height) + 1;
+
+  return x;
+}
+
+AvlTree::Node* AvlTree::LeftRotate(Node* x){
+  Node* y = x->right;
+  Node* temp = y->left;
+
+  y->left = x;
+  x->right = temp;
+
+  x->height = max(x->left->height, x->right->height) + 1;
+  y->height = max(y->left->height, y->right->height) + 1;
+
+  return y;
+}
+
 AvlTree::Node* AvlTree::RR(Node* parent){
   Node* temp = parent -> right;
 
@@ -93,3 +127,4 @@ AvlTree::Node* AvlTree::AvlSet(Node* parent){
   }
     
 }
+

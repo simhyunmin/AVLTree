@@ -29,7 +29,7 @@ public:
   void Ancestor(int x);                
   double Average(int x);            
   void Rank(int x);                    
-  int Erase(int x);
+  void Erase(int x);
   
   Node* getroot(){return root;}
 
@@ -44,6 +44,8 @@ public:
   static AvlTree::Node* FindUnbalancedNode(AvlTree::Node* node); // 특정 노드를 기준으로 부모 노드를 거슬러 올라가면서 불균형인 노드를 찾는 함수
   
   //불균형인 노드를 rotate 해주는 함수
+  static AvlTree::Node* RightRotate(AvlTree::Node* node);
+  static AvlTree::Node* LeftRotate(AvlTree::Node* node);
   static AvlTree::Node* RR(AvlTree::Node* node);
   static AvlTree::Node* LL(AvlTree::Node* node);
   static AvlTree::Node* LR(AvlTree::Node* node);
@@ -55,6 +57,9 @@ public:
 
 class AvlTreeUtils {
 public:
+
+  //최솟값을 찾는 함수
+  static AvlTree::Node* MinValueNode(AvlTree::Node* node);
 
   //특정 노드를 값에 의해 찾고 반환해주는 함수
   static AvlTree::Node* NodeFindByValue(AvlTree::Node* node, int value);
@@ -267,5 +272,6 @@ int RankUtils::RankRootLeftSearch(AvlTree::Node* node, int find_value){
 }
 
 //Height, Rank 함수 및 필요한 외부 함수 main.cpp 추가 완료 
+
 
 
