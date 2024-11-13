@@ -24,20 +24,20 @@ public:
   };
 
   void Find(int x);                    
-  void Insert(int x);                
   int Empty() ;                 
   void Size() const;                  
   void Height() const;                 
   void Ancestor(int x);                
   double Average(int x);            
   void Rank(int x);                    
-  void Erase(int x);   
+  void Insert(int x);
+  void Erase(int x);
 
-  //x를 삽입하는 함수
-  Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth = 0);
+  //특정 노드의 높이를 반환하는 함수
+  int getHeight(Node* node);
 
-  //x에 해당하는 노드를 삭제하는 함수
-  Node* EraseNode(Node* node, int x);
+  //특정 노드의 깊이를 반환하는 함수
+  int getDepth(Node* node, int x);  
 
   //x 값보다 작은 값을 가진 노드 수 + 1 값 반환
   int RankSearch(int x);
