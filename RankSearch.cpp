@@ -6,8 +6,10 @@
 
 
 // int AvlTree::RankSearch(int find_value){
-//   //사전에 Rank 함수 쪽에서 find_value가 잘못된 값이 들어올 경우 처리해줬음
-    
+//   //when Avl tree is empty, return 0;
+//   if(root == nullptr){
+//     return 0;
+//   }    
 //   //루트 기준 find_value가 root -> data보다 작은 경우 루트의 왼쪽 서브트리 중 find_value보다 작은 노드의 개수 + 1을 반환 
 //   if (find_value < root -> data) {  
 //     return RankRootEqualSearch(root -> left) - RankRootLeftSearch(root -> left, find_value) + 1;
