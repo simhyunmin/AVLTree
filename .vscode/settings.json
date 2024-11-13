@@ -8,6 +8,9 @@
         "vector": "cpp",
         "array": "cpp",
         "string_view": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "unordered_map": "cpp",
+        "ostream": "cpp",
+        "__hash_table": "cpp"
     }
 }
