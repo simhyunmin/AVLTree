@@ -40,7 +40,7 @@ int AvlTree::getDepth(Node* node, int x) {
   return node ? depth : -1;
 }
 
-// 특정 노드의 균형인수 계
+// 특정 노드의 균형인수 계산하는 함수
 int AvlTree::CalculateBalanceFactor(Node* node){
   return (node -> left -> height) - (node -> right -> height);
 }
