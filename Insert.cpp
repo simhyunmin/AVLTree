@@ -1,47 +1,61 @@
 #include "OSAP_002_T6_source.h"
 
-AvlTree::Node* AvlTree::InsertNode(Node* node, int x, int& depth_height_sum, int depth) {
+// AVL 트리에 새로운 x를 삽입하고 깊이와 높이의 합을 출력
+void AvlTree::Insert(int x) {
 
-    if (!node) { // 노드가 nullptr일 경우
+    if (!root) { // 트리가 비어있는 경우
+        root = new Node(x);
         node_count_++;
-        int depth_height_sum = depth + 1;
-        return new Node(x);
+        cout << getHeight(root) + getDepth(root, x) << endl; // 루트 노드의 깊이+높이 합 출력
     }
 
-    if (x < node->data){ // 삽입할 x가 현재 노드 data보다 작으면 왼쪽 서브트리에 삽입
-        node->left = InsertNode(node->left, x, depth_height_sum, depth + 1);
-    } else if (x > node->data){ // 삽입할 x가 현재 노드 data보다 크면 오른쪽 서브트리에 삽입
-        node->right = InsertNode(node->right, x, depth_height_sum, depth + 1);
-    } else { // 이미 존재하는 data면 삽입하지 않음
-        return node;
+    Node* current = root;
+    Node* parent = nullptr;
+
+    // 삽입할 위치를 찾기 위한 while 루프
+    while (current) {
+        parent = current;
+        if (x < current->data)
+            current = current->left;
+        else if (x > current->data)
+            current = current->right;
+        else
+            cout << getHeight(current) + getDepth(root, x) << endl; // 이미 존재하는 경우 깊이+높이 출력
+            return;
     }
 
-    node->height = 1 + max(node->left->height, node->right->height); // 현재 노드 높이 갱신
-    int balance = CalculateBalanceFactor(node); // 현재 노드의 균형 인수 계산
+    // 새로운 노드를 parent의 자식으로 연결
+    current = new Node(x);
+    if (x < parent->data)
+        parent->left = current;
+    else
+        parent->right = current;
 
-    if (balance > 1 && x < node->left->data) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
-        return RightRotate(node);
+    node_count_++; // 노드 개수 증가
+
+    // 균형을 맞추기 위한 while 루프
+    while (parent) {
+        int balance = CalculateBalanceFactor(parent);
+
+        if (balance > 1 && x < parent->left->data)
+            parent = RightRotate(parent);
+
+        else if (balance < -1 && x > parent->right->data)
+            parent = LeftRotate(parent);
+
+        else if (balance > 1 && x > parent->left->data) {
+            parent->left = LeftRotate(parent->left);
+            parent = RightRotate(parent);
+        }
+
+        else if (balance < -1 && x < parent->right->data) {
+            parent->right = RightRotate(parent->right);
+            parent = LeftRotate(parent);
+        }
+
+        if (parent == root) // 루트노드까지 균형 조정이 완료되면 종료
+            break;
     }
 
-    if (balance < -1 && x > node->right->data) { // 오른쪽으로 불균형이 생겼을 경우 왼쪽 회전
-        return LeftRotate(node);
-    }
-    
-    if (balance > 1 && x > node->left->data) { // 왼쪽-오른쪽 불균형일 경우 왼쪽 회전 후 오른쪽 회전
-        node->left = LeftRotate(node->left);
-        return RightRotate(node);
-    }
-
-    if (balance <-1 && x < node->right->data) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
-        node->right = RightRotate(node->right);
-        return LeftRotate(node);
-    }
-
-    return node;
-}
-
-void AvlTree::Insert(int x){ // 노드 x를 삽입하고 나서 깊이와 높이의 합을 출력
-    int depth_height_sum = 0;
-    root = InsertNode(root, x, depth_height_sum);
-    cout << depth_height_sum << endl;
+    cout << getHeight(current) + getDepth(root, x) << endl; // 삽입된 노드의 깊이+높이 합 출력
 }
