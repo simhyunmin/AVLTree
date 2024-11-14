@@ -34,10 +34,10 @@ public:
   void Erase(int x);
   
   //특정 노드의 높이를 반환하는 함수
-  int getHeight(Node* node);
+  int CalculateHeight(Node* node);
 
   //특정 노드의 깊이를 반환하는 함수
-  int getDepth(Node* node, int x);
+  int CalculateDepth(int x);
 
   //x 값보다 작은 값을 가진 노드 수 + 1 값 반환
   int RankSearch(int x);
@@ -45,17 +45,12 @@ public:
   //특정 노드를 값에 의해 찾고 반환해주는 함수
   Node* NodeFindByValue(Node* node, int value);
 
-  //최솟값을 찾는 함수
-  Node* MinValueNode(Node* node);
-
   //rotate 관련 함수
   int CalculateBalanceFactor(Node* node); //특정 노드의 균형인수 계산
   Node* FindUnbalancedNode (Node* node); // 특정 노드를 기준으로 부모 노드를 거슬러 올라가면서 불균형인 노드를 찾는 함수
   // int GetSubTreeHeight(Node* node); //특정 노드를 기준으로 서브 트리의 높이를 구하는 함수
 
   //불균형인 노드를 rotate 해주는 함수
-  Node* RightRotate(Node* node);
-  Node* LeftRotate(Node* node);
   Node* RR(Node* node); 
   Node* LL(Node* node);
   Node* LR(Node* node);

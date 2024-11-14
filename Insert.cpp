@@ -5,32 +5,37 @@ void AvlTree::Insert(int x) {
 
     if (!root) { // 트리가 비어있는 경우
         root = new Node(x);
-        node_count_++;
-        cout << getHeight(root) + getDepth(root, x) << endl; // 루트 노드의 깊이+높이 합 출력
+        ++node_count_;
+        cout << CalculateHeight(root) + CalculateDepth(x) << endl; // 루트 노드의 깊이+높이 합 출력
+        return;
     }
 
     Node* current = root;
     Node* parent = nullptr;
 
     // 삽입할 위치를 찾기 위한 while 루프
-    while (current) {
+    while (current != nullptr) {
         parent = current;
-        if (x < current->data)
+        if (x < current->data) {
             current = current->left;
-        else
+        }
+        else {
             current = current->right;
+        }
     }
 
     // 새로운 노드를 parent의 자식으로 연결
     current = new Node(x);
-    if (x < parent->data)
+    if (x < parent->data) {
         parent->left = current;
-    else
+    }
+    else {
         parent->right = current;
-
+    }
+        
     node_count_++; // 노드 개수 증가
 
     AvlSet(parent);
     
-    cout << getHeight(current) + getDepth(root, x) << endl; // 삽입된 노드의 깊이+높이 합 출력
+    cout << CalculateHeight(current) + CalculateDepth(x) << endl; // 삽입된 노드의 깊이+높이 합 출력
 }

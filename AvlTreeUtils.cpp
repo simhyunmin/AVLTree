@@ -18,7 +18,7 @@ AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
 }
 
 // 특정 노드의 높이를 반환하는 함수
-int AvlTree::getHeight(Node* node) {
+int AvlTree::CalculateHeight(Node* node) {
   if (!node) {
     return 0;
   }
@@ -27,17 +27,8 @@ int AvlTree::getHeight(Node* node) {
 }
 
 // 특정 노드의 깊이를 반환하는 함수
-int AvlTree::getDepth(Node* node, int x) {
-  int depth = 0;
-  while (node && node->data != x) {
-    depth++;
-    if (x < node->data) {
-      node = node->left;
-    } else {
-      node = node->right;
-    }
-  }
-  return node ? depth : -1;
+int AvlTree::CalculateDepth(int x) {
+  return NodeFindByValue(root, x)->depth;
 }
 
 // 특정 노드의 균형인수 계산하는 함수
