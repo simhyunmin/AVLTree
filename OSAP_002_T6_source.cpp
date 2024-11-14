@@ -151,18 +151,19 @@ int main() {
 
 int AvlTreeUtils::CalculateHeight(AvlTree::Node* node) {
     if (node == nullptr) {
-        return 0;
+        return -1;
     }
     return max(CalculateHeight(node->left), CalculateHeight(node->right)) + 1;
 }
 
 int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
-    if (node->parent == nullptr) {
-        return 0;
+    int depth = 0;
+    while (node->parent != nullptr) {
+        node = node->parent;
+        ++depth;
     }
-    return CalculateDepth(node->parent) + 1;
+    return depth;
 }
-
 
 AvlTree::Node* AvlTreeUtils::minValueNode(AvlTree::Node* node){
   AvlTree::Node* temp = node;
