@@ -316,12 +316,12 @@ void AvlTree::Insert(int insert_data){ // 노드 x를 삽입하고 나서 깊이
 
 void AvlTree::Erase(int x){
   Node* erase_node = AvlTreeUtils::NodeFindByValue(root, x);
-  Node* erase_parent_node = erase_node -> parent;
-
   if (erase_node == nullptr) {
     cout << 0 << "\n";
     return;
   }
+  Node* erase_parent_node = erase_node -> parent;
+
   node_count_--;
   cout << AvlTreeUtils::CalculateHeight(erase_node) + AvlTreeUtils::CalculateDepth(erase_node) << "\n";
     
