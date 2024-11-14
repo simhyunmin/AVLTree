@@ -8,7 +8,7 @@ void AvlTree::Erase(int x) {
     }
     Node *par_node = del_node->parent; // 삭제할 노드의 부모 노드
     Node *child_node = nullptr;  // 후계자 노드
-    int depthHeightSum = getHeight(del_node) + getDepth(root, x); // 깊이와 높이의 합 계산
+    int depthHeightSum = CalculateHeight(del_node) + CalculateDepth(x); // 깊이와 높이의 합 계산
 
 
 
