@@ -180,7 +180,7 @@ AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* root, int find_data)
 //특정 노드의 균형인수 계산
 int AvlRotateUtils::CalculateBalanceFactor(AvlTree::Node* node) {
     if (node == nullptr) { return 0; }
-    return (AvlTreeUtils::CalculateDepth(node)) - (AvlTreeUtils::CalculateHeight(node));
+    return (AvlTreeUtils::CalculateHeight(node -> left)) - (AvlTreeUtils::CalculateHeight(node -> right));
 }
 
 //불균형인 노드를 찾고 유형에 맞는 rotate 함수를 호출해주는 함수
