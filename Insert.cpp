@@ -17,11 +17,8 @@ void AvlTree::Insert(int x) {
         parent = current;
         if (x < current->data)
             current = current->left;
-        else if (x > current->data)
-            current = current->right;
         else
-            cout << getHeight(current) + getDepth(root, x) << endl; // 이미 존재하는 경우 깊이+높이 출력
-            return;
+            current = current->right;
     }
 
     // 새로운 노드를 parent의 자식으로 연결
@@ -33,29 +30,7 @@ void AvlTree::Insert(int x) {
 
     node_count_++; // 노드 개수 증가
 
-    // 균형을 맞추기 위한 while 루프
-    while (parent) {
-        int balance = CalculateBalanceFactor(parent);
-
-        if (balance > 1 && x < parent->left->data)
-            parent = RightRotate(parent);
-
-        else if (balance < -1 && x > parent->right->data)
-            parent = LeftRotate(parent);
-
-        else if (balance > 1 && x > parent->left->data) {
-            parent->left = LeftRotate(parent->left);
-            parent = RightRotate(parent);
-        }
-
-        else if (balance < -1 && x < parent->right->data) {
-            parent->right = RightRotate(parent->right);
-            parent = LeftRotate(parent);
-        }
-
-        if (parent == root) // 루트노드까지 균형 조정이 완료되면 종료
-            break;
-    }
-
+    AvlSet(parent);
+    
     cout << getHeight(current) + getDepth(root, x) << endl; // 삽입된 노드의 깊이+높이 합 출력
 }
