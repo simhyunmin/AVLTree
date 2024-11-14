@@ -154,19 +154,21 @@ void AvlTree::Clear(AvlTree::Node* node) {
     }
   }
 
-AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* root, int find_data){
-    if (root == nullptr || root -> data == find_data){
-      return root;
+AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* root, int find_data) {
+    if (root == nullptr || root->data == find_data) {
+        return root;
+    }
+    AvlTree::Node* current = root;
+   
+    while(find_data != current->data){
+      if(find_data > current->data){
+        current = current->right;
+      }else if(find_data < current->data){
+        current = current->left;
+      }
     }
 
-    if (find_data < root -> data){
-      return NodeFindByValue(root -> left, find_data);
-    }
-    else if (find_data > root -> data){
-      return NodeFindByValue(root -> right, find_data);
-    } else{
-      return root;
-    }
+    return current;
 }
 
 //특정 노드의 균형인수 계산
@@ -240,8 +242,36 @@ AvlTree::Node* AvlRotateUtils::RL(AvlTree::Node* parent){
   return RR(parent);
 }
 
-void AvlTree::Insert(int x){
+  //  int height;
+  //  int depth; 
+  //  int data;
+  //  Node* left;
+  // Node* right;
+  //  Node* parent;
+void AvlTree::Insert(int x){//새로운 값만 주어짐
+  Node* newNode = new Node(x);
+  ++node_count_;
+  if(root == nullptr){ // if root is nullptr, make newNode root;
+    root = newNode;
+    cout << 0 << "\n";
+    return;
+  }
 
+  Node* current = root;
+  
+  while(current != nullptr){ //roop till find address for newNode
+    if(currnet->data > x){
+      current = curren->left;
+    }else if(current->data < x){
+      current = curren->right;
+    }
+  }
+
+  currnet = newNode;
+  newNode->parent = current->parent;
+  newNode->depth = current->depth + 1;
+  cout << newNode->depth + newNode->height << "\n";
+  return;
 }
 
 void AvlTree::Erase(int x){
