@@ -1,70 +1,67 @@
 #include "OSAP_002_T6_source.h"
 
-void AvlTree::Erase(int x) {
-    Node *del_node = NodeFindByValue(root, x);
-    if (del_node == NULL) { // 노드가 존재하지 않으면 0을 출력하고 종료
-        cout << 0 << endl;
-        return;
-    }
-    Node *par_node = del_node->parent; // 삭제할 노드의 부모 노드
-    Node *child_node = nullptr;  // 후계자 노드
-    int depthHeightSum = CalculateHeight(del_node) + CalculateDepth(x); // 깊이와 높이의 합 계산
+void AvlTree::Erase(int x){
+  Node* del_node = AvlTreeUtils::NodeFindByValue(root, x);
+  Node* del_parent_node = del_node -> parent;
 
-
-
-    if (del_node->left == NULL && del_node->right == NULL) {  // 삭제할 노드의 자식이 하나 인 경우
-        child_node = NULL;
-    }
-    else if (del_node->left == NULL && del_node->right != NULL) {
-        child_node = del_node->right;
-    }
-    else if (del_node->left != NULL && del_node->right == NULL) {
-        child_node = del_node->left;
-    }
-    else { // 삭제할 노드의 자식이 두 개 있을 경우
-        child_node = del_node->right;
-        while (child_node->left != NULL) { 
-            child_node = child_node->left;
-        }
-        del_node->data = child_node->data;
-        del_node = child_node;
-        par_node = del_node->parent;
-        child_node = del_node->right;
+  if (del_node == nullptr) {
+    cout << 0 << "\n";
+    return;
+  }
+  node_count_--;
+  cout << AvlTreeUtils::CalculateHeight(del_node) + AvlTreeUtils::CalculateDepth(del_node) << "\n";
+  
+  //자식이 존재하지 않는 경우
+  if (!(del_node -> left && del_node -> right)) {
+    delete del_node;
+    del_node = nullptr;
+  }
+  
+  //오른쪽 자식만 존재하는 경우
+  else if (del_node -> left == nullptr && del_node -> right != nullptr) {
+    Node* temp = del_node -> right;
+    temp -> parent = del_node -> parent;
+    delete del_node;
+    del_node = temp;
+  }
+  
+  //왼쪽 자식만 존재하는 경우
+  else if (del_node -> right == nullptr && del_node -> left != nullptr) {
+    Node* temp = del_node -> left;
+    temp -> parent = del_node -> parent;
+    delete del_node;
+    del_node = temp;
+  }
+  
+  //둘 다 존재하는 경우
+  else {
+    Node* temp = del_node -> right;
+    
+    //후임자 찾기
+    while(temp -> left != nullptr) {
+      temp = temp -> left;
     }
     
-
-    if (par_node == NULL) { // 삭제 할 노드가 루트인 경우
-        root = child_node;
-        if (child_node != NULL) {
-            root->parent = NULL;
-        }
-    }
-    else if (del_node == par_node->left) {
-        par_node->left = child_node;
-        if (child_node != NULL) {
-            child_node->parent = par_node;
-        }
-    }
-    else {
-        par_node->right = child_node;
-        if (child_node != NULL) {
-            child_node->parent = par_node;
-        }
-    }
+    //찾은 후임자 저장
+    Node* successor_node = temp;
+    
+    //원래 후임자 위치는 삭제
+    delete temp;
+    temp = nullptr;
+  
+    successor_node -> parent = del_node -> parent;
     delete del_node;
-    node_count_--;
-
-    cout << depthHeightSum << endl; // 깊이와 높이의 합 출력
-
-    // 삭제 후 균형 복구를 위해 루트까지 거슬러 올라가며 rebalancing 수행
-    while (par_node != NULL) {
-        par_node = AvlSet(par_node);
-
-        if (par_node->parent == NULL) {
-            root = par_node;
-            break;
-        }
-
-        par_node = par_node->parent;
-    }
+    
+    //후임자를 del_node 위치로 대체한다.
+    del_node = successor_node;
+  }
+  
+  //자식이 모두 존재하지 않는 경우 del_node는 대체되지 않고 삭제되기에
+  if(del_node == nullptr) {
+    AvlRotateUtils::AvlSet(del_parent_node);
+  } 
+  //그 외에 경우 del_node부터 부모 노드를 거슬러 올라가면서 불균형인 노드 찾고 rotate
+  else {
+    AvlRotateUtils::AvlSet(del_node);
+  }
 }
