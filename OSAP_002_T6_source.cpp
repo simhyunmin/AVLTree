@@ -181,20 +181,24 @@ void AvlTree::Clear(AvlTree::Node* node) {
     }
 }
 
-AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* root, int find_data) {
-    if (root == nullptr || root->data == find_data) {
-        return root;
+AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data) {
+    if (node == nullptr || node->data == find_data) {
+        return node;
     }
-
-    if (find_data < root->data) {
-        return NodeFindByValue(root->left, find_data);
+    AvlTree::Node* current = node;
+    while (find_data != current->data) {
+        if (find_data > current->data && current->right != nullptr) {
+            current = current->right;
+        }
+        else if (find_data < current->data && current->left != nullptr) {
+            current = current->left;
+        }
+        else {
+            current = nullptr;
+            break;
+        }
     }
-    else if (find_data > root->data) {
-        return NodeFindByValue(root->right, find_data);
-    }
-    else {
-        return root;
-    }
+    return current;
 }
 
 //특정 노드의 균형인수 계산
