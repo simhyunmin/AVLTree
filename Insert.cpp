@@ -1,41 +1,39 @@
 #include "OSAP_002_T6_source.h"
 
 // AVL 트리에 새로운 x를 삽입하고 깊이와 높이의 합을 출력
-void AvlTree::Insert(int x) {
+void AvlTree::Insert(int insert_data){
+  //빈 트리일 경우 루트 노드에 삽입
+  Node* newNode = new Node(insert_data);
+  if(root == nullptr) {
+    root = newNode;
+    cout << 0 << "\n";
+    return;
+  }
 
-    if (!root) { // 트리가 비어있는 경우
-        root = new Node(x);
-        ++node_count_;
-        cout << CalculateHeight(root) + CalculateDepth(x) << endl; // 루트 노드의 깊이+높이 합 출력
-        return;
+  Node* current_node = root;
+  Node* current_parent = nullptr;
+
+  //삽입 위치 찾기
+  while (current_node != nullptr) {
+    current_parent = current_node;
+    if (insert_data < current_node -> data) {
+      current_node = current_node -> left;
+    } else {
+      current_node = current_node -> right;
     }
+  }
 
-    Node* current = root;
-    Node* parent = nullptr;
+  //부모 노드 기준으로 왼쪽, 오른쪽 자식 설정
+  if (insert_data < current_parent -> data) {
+    current_parent -> left = newNode;
+  } else {
+    current_parent -> right = newNode;
+  }
 
-    // 삽입할 위치를 찾기 위한 while 루프
-    while (current != nullptr) {
-        parent = current;
-        if (x < current->data) {
-            current = current->left;
-        }
-        else {
-            current = current->right;
-        }
-    }
+  newNode -> parent = current_parent;
 
-    // 새로운 노드를 parent의 자식으로 연결
-    current = new Node(x);
-    if (x < parent->data) {
-        parent->left = current;
-    }
-    else {
-        parent->right = current;
-    }
-        
-    node_count_++; // 노드 개수 증가
-
-    AvlSet(parent);
-    
-    cout << CalculateHeight(current) + CalculateDepth(x) << endl; // 삽입된 노드의 깊이+높이 합 출력
+  //삽입된 위치를 기준으로 불균형인 노드를 찾고 rotate 해주기
+  AvlRotateUtils::AvlSet(newNode);
+  cout << AvlTreeUtils::CalculateHeight(newNode) + AvlTreeUtils::CalculateDepth(newNode) << "\n";
+  
 }
