@@ -280,8 +280,6 @@ void AvlTree::Insert(int insert_data){ // 노드 x를 삽입하고 나서 깊이
     return;
   }
 
-void AvlTree::Insert(int x) {
-
   Node* current_node = root;
   Node* current_parent = nullptr;
 
@@ -309,17 +307,6 @@ void AvlTree::Insert(int x) {
   AvlRotateUtils::AvlSet(newNode);
   cout << AvlTreeUtils::CalculateHeight(newNode) + AvlTreeUtils::CalculateDepth(newNode) << "\n";
   
-}
-
-void AvlTreeUtils::UpdateParentHeight(AvlTree::Node* node){
-  while (node != nullptr) {
-    int left_height = (node -> left != nullptr) ? node -> left -> height : -1;
-    int right_height = (node -> right != nullptr) ? node -> right -> height : -1;
-
-    node -> height = max(left_height, right_height) + 1;
-
-    node = node -> parent;
-  }
 }
 
 void AvlTree::Erase(int x){
@@ -407,22 +394,6 @@ int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
     return key_sum;
 }
 
-int AvlTreeUtils::CalculateHeight(AvlTree::Node* node) {
-    if (node == nullptr) {
-        return 0;
-    }
-    return max(CalculateHeight(node->left), CalculateHeight(node->right)) + 1;
-}
-
-int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
-    int depth = 0;
-    while (node->parent != nullptr) {
-        node = node->parent;
-        ++depth;
-    }
-    return depth;
-}
-
 void AvlTree::Average(int x) {
     Node* sub_tree_root = AvlTreeUtils::NodeFindByValue(root, x);
 
@@ -461,7 +432,6 @@ void AvlTree::Rank(int x) {
 }
 
 
-<<<<<<< HEAD
 int RankUtils::RankSearch(AvlTree::Node* root, int find_value){
   
   if(root == nullptr) {return 0;}
