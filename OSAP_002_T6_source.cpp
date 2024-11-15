@@ -169,9 +169,11 @@ int main() {
 int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
     int depth = 0;
     while (node->parent != nullptr) {
+        cout << node->data << " ";
         node = node->parent;
         ++depth;
     }
+    cout << node->data << " || ";
     return depth;
 }
 
@@ -252,6 +254,7 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node) {
     ch->right = parent_node;
     parent_node->left = ch_right;
 
+    if (ch_right) { ch_right->parent = parent_node; }/////////
     ch->parent = parent_node->parent;
     parent_node->parent = ch;
 
@@ -276,10 +279,12 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
     ch->left = parent_node;
     parent_node->right = ch_left;
 
+    if (ch_left) { ch_left->parent = parent_node; }/////////
     //각 위치가 바뀐 노드에 대해서 부모 노드 업데이트
     ch->parent = parent_node->parent;
     parent_node->parent = ch;
 
+    
     if (ch->parent) {
         if (ch->parent->left == parent_node) {
             ch->parent->left = ch;
@@ -337,7 +342,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
 void AvlTree::Insert(int insert_data) {
     int depth_height_sum = 0;
     root = InsertNode(root, insert_data, depth_height_sum, -1);
-    Node* fNode = AvlTreeUtils::NodeFindByValue(root,insert_data);
+    Node* fNode = AvlTreeUtils::NodeFindByValue(root, insert_data);
     cout << fNode->height + AvlTreeUtils::CalculateDepth(fNode) << endl;
 
 }
