@@ -45,9 +45,35 @@ public:
   Node* RightRotate(AvlTree::Node* node);
   Node* LeftRotate(AvlTree::Node* node);
 
+  void PrintTree() const {
+    cout << "\n=== Tree Visualization ===\n";
+    if (root == nullptr) {
+        cout << "Empty tree\n";
+        return;
+    }
+    PrintTreeRecursive(root, "", true);
+    cout << "=======================\n";
+}
+
 private:
   Node* root;  //루트 노드를 가리키는 포인터
   int node_count_; //트리의 노드수
+  void PrintTreeRecursive(Node* node, string prefix, bool isLeft) const {
+    if (node == nullptr) return;
+
+    cout << prefix;
+    cout << (isLeft ? "+-- " : "+-- ");
+
+    // 노드의 값과 높이 출력
+    cout << node->data << " (h:" << node->height << ")" << endl;
+
+    // 자식 노드 출력을 위한 새로운 prefix 생성
+    string newPrefix = prefix + (isLeft ? "|   " : "    ");
+    
+    // 왼쪽 자식을 먼저 출력한 후 오른쪽 자식 출력
+    PrintTreeRecursive(node->left, newPrefix, true);
+    PrintTreeRecursive(node->right, newPrefix, false);
+  }
 };
 
 class AvlTreeUtils {
@@ -61,6 +87,7 @@ public:
   static AvlTree::Node* MinValueNode(AvlTree::Node* node);
   static void UpdateHeight(AvlTree::Node* node);
   static int SubtreeHeight(AvlTree::Node* node);
+  static int GetHeight(AvlTree::Node* node);
 };
 
 class RankUtils {
@@ -131,7 +158,9 @@ int main() {
         cin >> x;
         avl_tree.Erase(x);
       }
-
+      else if (command == "PrintTree") {
+        avl_tree.PrintTree();
+      }
     cin.clear();
     }
   }
@@ -176,7 +205,8 @@ AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data)
 
 void AvlTreeUtils::UpdateHeight(AvlTree::Node* node) {
     if (node) {
-        node->height = 1 + std::max(node->left ? node->left->height : 0, node->right ? node->right->height : 0);
+        node->height = 1 + std::max(node->left ? node->left->height : 0
+                                    , node->right ? node->right->height : 0);
     }
     return current;
 }
@@ -186,6 +216,13 @@ int AvlTreeUtils::SubtreeHeight(AvlTree::Node* node) {
         return 0;
     }
     return node -> height + 1;
+}
+
+int AvlTreeUtils::GetHeight(AvlTree::Node* node){
+  if (node == nullptr) {
+        return -1; 
+    }
+    return node->height;
 }
 
 
@@ -210,13 +247,12 @@ AvlTree::Node* AvlTree::FindUnbalancedNode(AvlTree::Node* node) {
 
 //불균형인 노드를 rotate 해주는 함수
 AvlTree::Node* AvlTree::RightRotate(Node* parent_node){
-  Node* ch = parent_node -> left;
-  Node* ch_right = ch -> right;
+  Node* ch = parent_node->left;
+  Node* ch_right = ch->right;
 
-  ch -> right = parent_node;
-  parent_node -> left = ch_right;
+  ch->right = parent_node;
+  parent_node->left = ch_right;
 
-  if (ch_right) {ch_right -> parent = parent_node;}
   ch -> parent = parent_node -> parent;
   parent_node -> parent = ch;
 
@@ -227,21 +263,20 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node){
       ch -> parent -> right = ch;
     }
   }
-  AvlTreeUtils::UpdateHeight(parent_node);
-  AvlTreeUtils::UpdateHeight(parent_node -> left);
-  AvlTreeUtils::UpdateHeight(parent_node -> left -> right);
-  
+
+  parent_node -> height = max(AvlTreeUtils::GetHeight(parent_node -> left), AvlTreeUtils::GetHeight(parent_node -> right)) + 1;
+  ch -> height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
+
   return ch;
 }
 AvlTree::Node* AvlTree::LeftRotate(Node* parent_node){
-  Node* ch = parent_node -> right;
-  Node* ch_left = ch -> left;
+  Node* ch = parent_node->right;
+  Node* ch_left = ch->left;
   //부모 노드의 오른쪽 자식의 왼쪽 자식을 부모 노드로 설정
   //원래 부모 노드의 오른쪽 자식의 왼쪽 자식을 원래 부모 노드의 오른쪽 자식으로 설정
-  ch -> left = parent_node;
-  parent_node -> right = ch_left;
-  //부모 노드의 오른쪽 자식중 왼쪽 자식이 실제로 존재할 경우 부모 노드도 업데이트 해줘야함
-  if(ch_left) {ch_left -> parent = parent_node;}
+  ch->left = parent_node;
+  parent_node->right = ch_left;
+
   //각 위치가 바뀐 노드에 대해서 부모 노드 업데이트
   ch -> parent = parent_node -> parent;
   parent_node -> parent = ch;
@@ -254,10 +289,8 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node){
     }
   }
 
-  AvlTreeUtils::UpdateHeight(parent_node);
-  AvlTreeUtils::UpdateHeight(parent_node -> right);
-  AvlTreeUtils::UpdateHeight(parent_node -> right -> left);
-  //서브 트리의 루트 반환
+  ch->height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
+  parent_node->height = max(AvlTreeUtils::GetHeight(parent_node -> left), AvlTreeUtils::GetHeight(parent_node -> right)) + 1;
   return ch;
 }
 AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& depth_height_sum, int depth){
@@ -278,10 +311,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
   }
 
   AvlTreeUtils::UpdateHeight(node);
-  cout << node -> data << "의 높이" << node -> height << "\n" ;
-  
   int balance = CalculateBalanceFactor(node);
-  cout<<"노드 :"<< node -> data << ", " <<balance<< ", "<<insert_data << ", " << node -> right -> data << "\n";
 
   if (balance > 1 && insert_data < node->left->data) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
     return RightRotate(node);
@@ -333,9 +363,7 @@ AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data, bool& found){
     }
   }
 
-  int left_height = node -> left ? node -> left -> height : 0;
-  int right_height = node -> right ? node -> right -> height : 0;
-  node -> height = 1 + max(left_height, right_height);
+  AvlTreeUtils::UpdateHeight(node);
 
   int balance = CalculateBalanceFactor(node);
   int left_child_balance = CalculateBalanceFactor(node->left); // 왼쪽 자식 노드의 균형 인수 계산
@@ -378,6 +406,7 @@ void AvlTree::Erase(int x) {
 
 void AvlTree::Find(int x) {
     Node* node = AvlTreeUtils::NodeFindByValue(root, x);
+    cout << AvlTreeUtils::CalculateDepth(node) << ", " << node -> height << endl;
     cout << ((node != nullptr) ? AvlTreeUtils::CalculateDepth(node) + node -> height : 0) << "\n";
 }
 
