@@ -191,10 +191,11 @@ void AvlTree::Clear(AvlTree::Node* node) {
     }
 }
 
-AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data) {
-    if (node == nullptr || node->data == find_data) {
-        return node;
+AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* root, int find_data) {
+    if (root == nullptr || root->data == find_data) {
+        return root;
     }
+
     if (find_data > root->data) {
         return NodeFindByValue(root->right, find_data);
     } 
@@ -203,12 +204,13 @@ AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data)
     }
 }
 
+
 void AvlTreeUtils::UpdateHeight(AvlTree::Node* node) {
     if (node) {
         node->height = 1 + std::max(node->left ? node->left->height : 0
                                     , node->right ? node->right->height : 0);
     }
-    return current;
+    return;
 }
 
 int AvlTreeUtils::SubtreeHeight(AvlTree::Node* node) {
