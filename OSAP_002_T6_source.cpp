@@ -53,7 +53,10 @@ public:
     }
     PrintTreeRecursive(root, "", true);
     cout << "=======================\n";
-}
+  }
+  void test() {
+    cout << root -> left -> right -> parent -> data << endl;
+  }
 
 private:
   Node* root;  //루트 노드를 가리키는 포인터
@@ -161,6 +164,9 @@ int main() {
       else if (command == "PrintTree") {
         avl_tree.PrintTree();
       }
+      else if (command == "test") {
+        avl_tree.test();
+      }
     cin.clear();
     }
   }
@@ -254,7 +260,8 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node){
 
   ch->right = parent_node;
   parent_node->left = ch_right;
-
+  
+  if(ch_right) {ch_right -> parent = parent_node;}
   ch -> parent = parent_node -> parent;
   parent_node -> parent = ch;
 
@@ -280,6 +287,7 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node){
   parent_node->right = ch_left;
 
   //각 위치가 바뀐 노드에 대해서 부모 노드 업데이트
+  if(ch_left) {ch_left -> parent = parent_node;}
   ch -> parent = parent_node -> parent;
   parent_node -> parent = ch;
   //parent_node가 원래 부모의 왼쪽 자식이었는지 오른쪽 자식이었는지에 따라 ch -> parent에서 left, right 자식 설정
@@ -301,7 +309,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
   //노드가 nullptr일 경우
   if (!node) {
     ++node_count_;
-    depth_height_sum = depth + 0;
+    depth_height_sum = depth + 1;
     return new Node(insert_data);
   }
   //삽입할 insert_data가 현재 노드 data보다 작으면 왼쪽 서브트리 삽입
@@ -326,12 +334,12 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
   }
 
   if (balance > 1 && insert_data > node->left->data) { // 왼쪽-오른쪽 불균형일 경우 왼쪽 회전 후 오른쪽 회전
-    node->left = LeftRotate(node->left);
+    LeftRotate(node->left);
     return RightRotate(node);
   }
 
   if (balance <-1 && insert_data < node->right->data) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
-    node->right = RightRotate(node->right);
+    RightRotate(node->right);
     return LeftRotate(node);
   }
   
@@ -340,7 +348,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
 
 void AvlTree::Insert(int insert_data) {
   int depth_height_sum = 0;
-  root = InsertNode(root, insert_data, depth_height_sum, 0);
+  root = InsertNode(root, insert_data, depth_height_sum, -1);
   cout << depth_height_sum << "\n";
 }
 
