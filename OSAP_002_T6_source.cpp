@@ -258,6 +258,7 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node){
   ch -> parent = parent_node -> parent;
   parent_node -> parent = ch;
 
+  
   if (ch -> parent) {
     if (ch -> parent -> left == parent_node) {
       ch -> parent -> left = ch;
@@ -281,7 +282,7 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node){
   //각 위치가 바뀐 노드에 대해서 부모 노드 업데이트
   ch -> parent = parent_node -> parent;
   parent_node -> parent = ch;
-
+  //parent_node가 원래 부모의 왼쪽 자식이었는지 오른쪽 자식이었는지에 따라 ch -> parent에서 left, right 자식 설정
   if (ch -> parent) {
     if (ch -> parent -> left == parent_node) {
       ch -> parent -> left = ch;
@@ -289,6 +290,8 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node){
       ch -> parent -> right = ch;
     }
   }
+  //높이 업데이트 해주는 부분
+  //parent_node -> height 먼저 수정하고 ch -> height 수정
   parent_node->height = max(AvlTreeUtils::GetHeight(parent_node -> left), AvlTreeUtils::GetHeight(parent_node -> right)) + 1;
   ch->height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
 
@@ -298,7 +301,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
   //노드가 nullptr일 경우
   if (!node) {
     ++node_count_;
-    depth_height_sum = depth + 1;
+    depth_height_sum = depth + 0;
     return new Node(insert_data);
   }
   //삽입할 insert_data가 현재 노드 data보다 작으면 왼쪽 서브트리 삽입
