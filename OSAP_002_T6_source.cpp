@@ -264,8 +264,7 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node){
     } else {
       ch -> parent -> right = ch;
     }
-  }
-
+  }  
   parent_node -> height = max(AvlTreeUtils::GetHeight(parent_node -> left), AvlTreeUtils::GetHeight(parent_node -> right)) + 1;
   ch -> height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
 
@@ -290,9 +289,9 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node){
       ch -> parent -> right = ch;
     }
   }
-
-  ch->height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
   parent_node->height = max(AvlTreeUtils::GetHeight(parent_node -> left), AvlTreeUtils::GetHeight(parent_node -> right)) + 1;
+  ch->height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
+
   return ch;
 }
 AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& depth_height_sum, int depth){
@@ -313,6 +312,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
   }
 
   AvlTreeUtils::UpdateHeight(node);
+  
   int balance = CalculateBalanceFactor(node);
 
   if (balance > 1 && insert_data < node->left->data) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
@@ -331,7 +331,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
     node->right = RightRotate(node->right);
     return LeftRotate(node);
   }
-
+  
   return node;
 }
 
@@ -396,7 +396,6 @@ void AvlTree::Erase(int x) {
   bool found = false;
   Node* node = AvlTreeUtils::NodeFindByValue(root, x);
   if (node == nullptr) {
-    cout << "노드를 못 찾음" << "\n";
     cout << 0 << "\n";
     return;
   }
