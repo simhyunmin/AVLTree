@@ -47,13 +47,13 @@ public:
     Node* LeftRotate(AvlTree::Node* node);
 
     void PrintTree() const {
-      cout << "\n=== Tree Visualization ===\n";
-      if (root == nullptr) {
-          cout << "Empty tree\n";
-          return;
-      }
-      PrintTreeRecursive(root, "", true);
-      cout << "=======================\n";
+        cout << "\n=== Tree Visualization ===\n";
+        if (root == nullptr) {
+            cout << "Empty tree\n";
+            return;
+        }
+        PrintTreeRecursive(root, "", true);
+        cout << "=======================\n";
     }
 
 private:
@@ -106,68 +106,70 @@ public:
 
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
-    std::ifstream inputFile("input.txt");
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout.tie(nullptr);
+//   std::ifstream inputFile("input.txt");
 
-    int T;
-    inputFile >> T;
-    while (T--) {
-        int Q;
-        inputFile >> Q;
-        AvlTree avl_tree;
-        for (int i = 0; i < Q; ++i) {
-            string command;
-            inputFile >> command;
+  int T;
+  cin >> T;
+  while(T--){
+    int Q;
+    cin >> Q;
+    AvlTree avl_tree;
+    for (int i = 0; i < Q; ++i) {
+      string command;
+      cin >> command;
 
-            if (command == "Empty") {
+      if (command == "Empty") {
                 avl_tree.Empty();
-            }
-            else if (command == "Size") {
+      }
+      else if (command == "Size") {
                 avl_tree.Size();
-            }
-            else if (command == "Height") {
-                avl_tree.Height();
-            }
-            else if (command == "Insert") {
-                int x;
-                inputFile >> x;
-                avl_tree.Insert(x);
-            }
-            else if (command == "Find") {
-                int x;
-                inputFile >> x;
-                avl_tree.Find(x); // 노드의 깊이와 높이의 합 출력
-            }
-            else if (command == "Ancestor") {
-                int x;
-                inputFile >> x;
-                avl_tree.Ancestor(x); // 조상 출력
-            }
-            else if (command == "Average") {
-                int x;
-                inputFile >> x;
-                avl_tree.Average(x); // 평균 출력
-            }
-            else if (command == "Rank") {
-                int x;
-                inputFile >> x;
-                avl_tree.Rank(x);
-            }
-            else if (command == "Erase") {
-                int x;
-                inputFile >> x;
-                avl_tree.Erase(x);
-            }
-            else if (command == "PrintTree") {
-                avl_tree.PrintTree();
-            }
-            cin.clear();
-        }
+      }
+      else if (command == "Height") {
+        avl_tree.Height();
+      }
+      else if (command == "Insert") {
+        int x;
+        cin >> x;
+        avl_tree.Insert(x);
+      }
+      else if (command == "Find") {
+        int x;
+        cin >> x;
+        avl_tree.Find(x); // 노드의 깊이와 높이의 합 출력
+      }
+      else if (command == "Ancestor") {
+        int x;
+        cin >> x;
+        avl_tree.Ancestor(x); // 조상 출력
+      }
+      else if (command == "Average") {
+        int x;
+        cin >> x;
+        avl_tree.Average(x); // 평균 출력
+      }
+      else if (command == "Rank") {
+        int x;
+        cin >> x;
+        avl_tree.Rank(x);
+      }
+      else if (command == "Erase") {
+        int x;
+        cin >> x;
+        avl_tree.Erase(x);
+      }
+      else if (command == "PrintTree") {
+        avl_tree.PrintTree();
+      }
+    cin.clear();
     }
-    return 0;
+  }
+  return 0;
 }
+
+
 int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
     int depth = 0;
     while (node->parent != nullptr) {
@@ -247,33 +249,31 @@ AvlTree::Node* AvlTree::FindUnbalancedNode(AvlTree::Node* node) {
 }
 
 //불균형인 노드를 rotate 해주는 함수
+AvlTree::Node* AvlTree::RightRotate(Node* parent_node){
+  Node* ch = parent_node->left;
+  Node* ch_right = ch->right;
 
-AvlTree::Node* AvlTree::RightRotate(Node* parent_node) {
-    Node* ch = parent_node->left;
-    Node* ch_right = ch->right;
+  ch->right = parent_node;
+  parent_node->left = ch_right;
 
-    ch->right = parent_node;
-    parent_node->left = ch_right;
+  if(ch_right) {ch_right -> parent = parent_node;}
+  ch -> parent = parent_node -> parent;
+  parent_node -> parent = ch;
 
-    if (ch_right) { ch_right->parent = parent_node; }
-    ch->parent = parent_node->parent;
-    parent_node->parent = ch;
-
-    if (ch->parent) {
-      if (ch->parent->left == parent_node) {
-        ch->parent->left = ch;
-      }
-      else {
-        ch->parent->right = ch;
-      }
+  
+  if (ch -> parent) {
+    if (ch -> parent -> left == parent_node) {
+      ch -> parent -> left = ch;
+    } else {
+      ch -> parent -> right = ch;
     }
-    parent_node->height = max(AvlTreeUtils::GetHeight(parent_node->left), AvlTreeUtils::GetHeight(parent_node->right)) + 1;
-    ch->height = max(AvlTreeUtils::GetHeight(ch->left), AvlTreeUtils::GetHeight(ch->right)) + 1;
+  }  
+  parent_node -> height = max(AvlTreeUtils::GetHeight(parent_node -> left), AvlTreeUtils::GetHeight(parent_node -> right)) + 1;
+  ch -> height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
 
-    return ch;
+  return ch;
 }
-
-AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
+AvlTree::Node* AvlTree::LeftRotate(Node* parent_node){
   Node* ch = parent_node->right;
   Node* ch_left = ch->left;
   //부모 노드의 오른쪽 자식의 왼쪽 자식을 부모 노드로 설정
@@ -281,26 +281,25 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
   ch->left = parent_node;
   parent_node->right = ch_left;
 
-  if (ch_left) { ch_left->parent = parent_node; }
   //각 위치가 바뀐 노드에 대해서 부모 노드 업데이트
-  ch->parent = parent_node->parent;
-  parent_node->parent = ch;
-  
+  if(ch_left) {ch_left -> parent = parent_node;}
+  ch -> parent = parent_node -> parent;
+  parent_node -> parent = ch;
+  //parent_node가 원래 부모의 왼쪽 자식이었는지 오른쪽 자식이었는지에 따라 ch -> parent에서 left, right 자식 설정
   if (ch -> parent) {
     if (ch -> parent -> left == parent_node) {
       ch -> parent -> left = ch;
-    } 
-    else {
+    } else {
       ch -> parent -> right = ch;
     }
   }
-  parent_node->height = max(AvlTreeUtils::GetHeight(parent_node->left), AvlTreeUtils::GetHeight(parent_node->right)) + 1;
-  ch->height = max(AvlTreeUtils::GetHeight(ch->left), AvlTreeUtils::GetHeight(ch->right)) + 1;
-    
+  //높이 업데이트 해주는 부분
+  //parent_node -> height 먼저 수정하고 ch -> height 수정
+  parent_node->height = max(AvlTreeUtils::GetHeight(parent_node -> left), AvlTreeUtils::GetHeight(parent_node -> right)) + 1;
+  ch->height = max(AvlTreeUtils::GetHeight(ch -> left), AvlTreeUtils::GetHeight(ch -> right)) + 1;
+
   return ch;
-
 }
-
 AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& depth_height_sum, int depth) {
     //노드가 nullptr일 경우
     if (!node) {
@@ -345,10 +344,12 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
 void AvlTree::Insert(int insert_data) {
     int depth_height_sum = 0;
     root = InsertNode(root, insert_data, depth_height_sum, -1);
+    //cout << depth_height_sum << "\n";
     Node* fNode = AvlTreeUtils::NodeFindByValue(root,insert_data);
     cout << fNode->height + AvlTreeUtils::CalculateDepth(fNode) << endl;
 
 }
+
 AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data, bool& found) {
     if (!node) {
         return nullptr;
@@ -418,6 +419,7 @@ void AvlTree::Erase(int x) {
 
 void AvlTree::Find(int x) {
     Node* node = AvlTreeUtils::NodeFindByValue(root, x);
+    //cout << AvlTreeUtils::CalculateDepth(node) << ", " << node->height << endl;
     cout << ((node != nullptr) ? AvlTreeUtils::CalculateDepth(node) + node->height : 0) << "\n";
 }
 
@@ -427,6 +429,7 @@ void AvlTree::Ancestor(int x) {
     int depth = AvlTreeUtils::CalculateDepth(node);
     int height = node->height;
     int parent_path_sum = AvlTreeUtils::GetPathToRootSum(node->parent);
+    //cout << depth << " " << height << "\n";
     cout << depth + height << " " << parent_path_sum << "\n";
 }
 
@@ -467,7 +470,7 @@ void AvlTree::Height() const {
 }
 
 void AvlTree::Rank(int x) {
-    Node* node = AvlTreeUtils::NodeFindByValue(root, x);
+    Node* node = AvlTreeUtils::NodeFindByValue(root, x);/////////////////////////////////////////////////
     if (node == nullptr) {
         cout << 0 << "\n";
         return;
