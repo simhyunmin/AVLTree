@@ -22,9 +22,8 @@
 // }
 
 // //특정 노드의 균형인수 계산
-// int AvlRotateUtils::CalculateBalanceFactor(AvlTree::Node* node) {
-//     if (node == nullptr) { return 0; }
-//     return (AvlTreeUtils::CalculateHeight(node -> left)) - (AvlTreeUtils::CalculateHeight(node -> right));
+// int AvlTree::CalculateBalanceFactor(Node* node){
+//   return (node -> left -> height) - (node -> right -> height);
 // }
 
 // //특정 노드의 높이를 구하는 함수 : node -> height로 접근하면 되기에 주석 처리
