@@ -168,12 +168,14 @@ int main() {
 }
 int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
     int depth = 0;
+    if (node == nullptr) {/////혹시 몰라서 추가
+        return 0;
+    }
     while (node->parent != nullptr) {
-        cout << node->data << " ";
         node = node->parent;
         ++depth;
     }
-    cout << node->data << " || ";
+    
     return depth;
 }
 
@@ -212,7 +214,7 @@ void AvlTreeUtils::UpdateHeight(AvlTree::Node* node) {
     return;
 }
 
-int AvlTreeUtils::SubtreeHeight(AvlTree::Node* node) {
+int AvlTreeUtils::SubtreeHeight(AvlTree::Node* node) {//////////발표전에 밑이랑 합치기
     if (node == nullptr) {
         return 0;
     }
@@ -419,9 +421,8 @@ void AvlTree::Find(int x) {
     cout << ((node != nullptr) ? AvlTreeUtils::CalculateDepth(node) + node->height : 0) << "\n";
 }
 
-void AvlTree::Ancestor(int x) {
+void AvlTree::Ancestor(int x) {//존재하는 값
     Node* node = AvlTreeUtils::NodeFindByValue(root, x);
-
     int depth = AvlTreeUtils::CalculateDepth(node);
     int height = node->height;
     int parent_path_sum = AvlTreeUtils::GetPathToRootSum(node->parent);
@@ -441,7 +442,6 @@ int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
 
 void AvlTree::Average(int x) {
     Node* sub_tree_root = AvlTreeUtils::NodeFindByValue(root, x);
-
     Node* min_node = sub_tree_root;
     while (min_node->left != NULL) {
         min_node = min_node->left;
@@ -451,8 +451,7 @@ void AvlTree::Average(int x) {
     while (max_node->right != NULL) {
         max_node = max_node->right;
     }
-
-    cout << static_cast<double>(min_node->data + max_node->data) / 2 << "\n";
+    cout << (min_node->data + max_node->data) / 2 << "\n";/////////////////
 }
 
 void AvlTree::Height() const {
@@ -481,7 +480,6 @@ void AvlTree::Rank(int x) {
 
 
 int RankUtils::RankSearch(AvlTree::Node* root, int find_value) {
-
     if (root == nullptr) { return 0; }
 
     //루트 기준 find_value가 root -> data보다 작은 경우 루트의 왼쪽 서브트리 중 find_value보다 작은 노드의 개수 + 1을 반환 
