@@ -12,11 +12,12 @@ public:
     struct Node {
         int data;
         int height;
+        int size;
         Node* left;
         Node* right;
         Node* parent;
 
-        Node(int data_) : data(data_), height(0), left(nullptr), right(nullptr), parent(nullptr) {}
+        Node(int data_) : data(data_), height(0),size(1), left(nullptr), right(nullptr), parent(nullptr) {}
     };
     void Find(int x);
     Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth);
@@ -33,6 +34,7 @@ public:
     void Ancestor(int x);
     void Average(int x);
     void Rank(int x);
+    int CalculateRank(Node* node,int x);
     Node* EraseNode(Node* node, int x, bool& found);
     void Erase(int x);
     //모든 노드를 삭제해주는 함수 (소멸자 부분에서 호출)
@@ -65,7 +67,7 @@ private:
         cout << (isLeft ? "--- " : "+-- ");
 
         // 노드의 값과 높이 출력
-        cout << node->data << " (h:" << node->height << ")" << endl;
+        cout << node->data << " (h:" << node->height << ")" << " (s:" << node->size << ")" << endl;
 
         // 자식 노드 출력을 위한 새로운 prefix 생성
         string newPrefix = prefix + (isLeft ? "|   " : "    ");
@@ -88,6 +90,8 @@ public:
     static void UpdateHeight(AvlTree::Node* node);
     static int SubtreeHeight(AvlTree::Node* node);
     static int GetHeight(AvlTree::Node* node);
+    static int GetSize(AvlTree::Node* node);
+    static void UpdateSize(AvlTree::Node* node);
 };
 
 class RankUtils {
@@ -214,6 +218,12 @@ void AvlTreeUtils::UpdateHeight(AvlTree::Node* node) {
     return;
 }
 
+void AvlTreeUtils::UpdateSize(AvlTree::Node* node) {
+    if (node) {
+        node->size = 1 + AvlTreeUtils::GetSize(node->left) + AvlTreeUtils::GetSize(node->right);
+    }
+}
+
 int AvlTreeUtils::SubtreeHeight(AvlTree::Node* node) {//////////발표전에 밑이랑 합치기
     if (node == nullptr) {
         return 0;
@@ -228,6 +238,12 @@ int AvlTreeUtils::GetHeight(AvlTree::Node* node) {
     return node->height;
 }
 
+int AvlTreeUtils::GetSize(AvlTree::Node* node) {
+    if (node == nullptr) {
+        return 0;
+    }
+    return node->size;
+}
 
 //특정 노드의 균형인수 계산
 int AvlTree::CalculateBalanceFactor(AvlTree::Node* node) {
@@ -270,7 +286,9 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node) {
     }
     parent_node->height = max(AvlTreeUtils::GetHeight(parent_node->left), AvlTreeUtils::GetHeight(parent_node->right)) + 1;
     ch->height = max(AvlTreeUtils::GetHeight(ch->left), AvlTreeUtils::GetHeight(ch->right)) + 1;
-
+    ////////////////////////////////////
+    AvlTreeUtils::UpdateSize(parent_node);
+    AvlTreeUtils::UpdateSize(ch);
     return ch;
 }
 AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
@@ -297,7 +315,9 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
     }
     parent_node->height = max(AvlTreeUtils::GetHeight(parent_node->left), AvlTreeUtils::GetHeight(parent_node->right)) + 1;
     ch->height = max(AvlTreeUtils::GetHeight(ch->left), AvlTreeUtils::GetHeight(ch->right)) + 1;
-
+    ///////
+    AvlTreeUtils::UpdateSize(parent_node);
+    AvlTreeUtils::UpdateSize(ch);
     return ch;
 }
 AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& depth_height_sum, int depth) {
@@ -318,7 +338,7 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
     }
 
     AvlTreeUtils::UpdateHeight(node);
-
+    AvlTreeUtils::UpdateSize(node);
     int balance = CalculateBalanceFactor(node);
 
     if (balance > 1 && insert_data < node->left->data) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
@@ -377,6 +397,7 @@ AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data, bool& found) {//ro
     }
 
     AvlTreeUtils::UpdateHeight(node);
+    AvlTreeUtils::UpdateSize(node);
 
     int balance = CalculateBalanceFactor(node);
     int left_child_balance = CalculateBalanceFactor(node->left); // 왼쪽 자식 노드의 균형 인수 계산
@@ -465,68 +486,96 @@ void AvlTree::Height() const {
 
 void AvlTree::Rank(int x) {
     Node* node = AvlTreeUtils::NodeFindByValue(root, x);
-    if (node == nullptr) {
-        cout << 0 << "\n";
-        return;
-    }
-    int node_rank = RankUtils::RankSearch(root, x);
-    if (node_rank == 0) {
-        cout << 0 << "\n";
+    if (node == nullptr) {//비어있을 경우 , 루트인 경우, 일반 경우
+        cout << 0 << endl;
         return;
     }
     int depth_plus_height_sum = AvlTreeUtils::CalculateDepth(node) + node->height;
-    cout << to_string(depth_plus_height_sum) + " " + to_string(node_rank) << "\n";
+    cout << depth_plus_height_sum << " " << CalculateRank(root, x) << endl;
 }
 
-
-int RankUtils::RankSearch(AvlTree::Node* root, int find_value) {
-    if (root == nullptr) { return 0; }
-
-    //루트 기준 find_value가 root -> data보다 작은 경우 루트의 왼쪽 서브트리 중 find_value보다 작은 노드의 개수 + 1을 반환 
-    if (find_value < root->data) {
-        return RankRootEqualSearch(root->left) - RankRootLeftSearch(root->left, find_value) + 1;
-    }
-
-    //루트 기준 find_value가 root -> data랑 같은 경우 루트의 왼쪽 서브트리의 총 노드 개수 반환
-    if (find_value == root->data) {
-        return RankRootEqualSearch(root->left) + 1;
-    }
-
-    //루트 기준 find_value가 root -> data보다 큰 경우 루트의 오른쪽 서브트리 중 find_value를 찾을 때까지 탐색한 총 노드 수 + 루트 왼쪽 서브트리 총 개수 + 루트 
-    if (find_value > root->data) {
-        return 1 + RankRootRightSearch(root->right, find_value) + RankRootEqualSearch(root->left);
-    }
-    return 0;
-}
-
-int RankUtils::RankRootRightSearch(AvlTree::Node* node, int find_value) {
+int AvlTree::CalculateRank(Node* node,int x) {
     if (node == nullptr) {
         return 0;
     }
-    if (node->data == find_value) {
-        return 1;
+
+    if (x < node->data) {
+        return CalculateRank(node->left, x);
     }
-    return 1 + RankRootRightSearch(node->left, find_value) + RankRootRightSearch(node->right, find_value) + 1;
+    else if (x > node->data){
+        return AvlTreeUtils::GetSize(node->left) + 1 + CalculateRank(node->right,x);
+    }
+    else {
+        return AvlTreeUtils::GetSize(node->left)+1;
+    }
 }
-
-//루트 왼쪽 서브트리의 총 노드 개수 출력
-int RankUtils::RankRootEqualSearch(AvlTree::Node* node) {
-    if (node == nullptr) {
-        return 0;
-    }
-    return 1 + RankRootEqualSearch(node->left) + RankRootEqualSearch(node->right);
-}
-
-//루트 기준 왼쪽 서브트리 탐색
-int RankUtils::RankRootLeftSearch(AvlTree::Node* node, int find_value) {
-    if (node == nullptr) {
-        return 0;
-    }
-    if (node->data == find_value) {
-        return 1;
-    }
-
-    return 1 + RankRootLeftSearch(node->left, find_value) + RankRootLeftSearch(node->right, find_value);
-}
-
+//left 서브 트리가 있는 부모까지 올라가기
+// 
+//
+//void AvlTree::Rank(int x) {
+//    Node* node = AvlTreeUtils::NodeFindByValue(root, x);
+//    if (node == nullptr) {
+//        cout << 0 << "\n";
+//        return;
+//    }
+//    int node_rank = RankUtils::RankSearch(root, x);
+//    if (node_rank == 0) {
+//        cout << 0 << "\n";
+//        return;
+//    }
+//    int depth_plus_height_sum = AvlTreeUtils::CalculateDepth(node) + node->height;
+//    cout << to_string(depth_plus_height_sum) + " " + to_string(node_rank) << "\n";
+//}
+//
+//
+//int RankUtils::RankSearch(AvlTree::Node* node, int find_value) {
+//    if (node == nullptr) { return 0; }
+//
+//    //루트 기준 find_value가 root -> data보다 작은 경우 루트의 왼쪽 서브트리 중 find_value보다 작은 노드의 개수 + 1을 반환 
+//    if (find_value < node->data) {
+//        return RankRootEqualSearch(node->left) - RankRootLeftSearch(node->left, find_value) + 1;
+//    }
+//
+//    //루트 기준 find_value가 root -> data랑 같은 경우 루트의 왼쪽 서브트리의 총 노드 개수 반환
+//    if (find_value == node->data) {
+//        return RankRootEqualSearch(node->left) + 1;
+//    }
+//
+//    //루트 기준 find_value가 root -> data보다 큰 경우 루트의 오른쪽 서브트리 중 find_value를 찾을 때까지 탐색한 총 노드 수 + 루트 왼쪽 서브트리 총 개수 + 루트 
+//    if (find_value > node->data) {
+//        return 1 + RankRootRightSearch(node->right, find_value) + RankRootEqualSearch(node->left);
+//    }
+//    return 0;
+//}
+//
+//int RankUtils::RankRootRightSearch(AvlTree::Node* node, int find_value) {
+//    if (node == nullptr) {
+//        return 0;
+//    }
+//    if (node->data == find_value) {
+//        return 1;
+//    }
+//    return 1 + RankRootRightSearch(node->left, find_value) + RankRootRightSearch(node->right, find_value) + 1;
+//}
+//
+////루트 왼쪽 서브트리의 총 노드 개수 출력
+//int RankUtils::RankRootEqualSearch(AvlTree::Node* node) {
+//    if (node == nullptr) {
+//        return 0;
+//    }
+//    return 1 + RankRootEqualSearch(node->left) + RankRootEqualSearch(node->right);
+//}
+//
+////루트 기준 왼쪽 서브트리 탐색
+//int RankUtils::RankRootLeftSearch(AvlTree::Node* node, int find_value) {
+//    if (node == nullptr) {
+//        return 0;
+//    }
+//    if (node->data == find_value) {
+//        return 1;
+//    }
+//
+//    return 1 + RankRootLeftSearch(node->left, find_value) + RankRootLeftSearch(node->right, find_value);
+//}
+//
 
