@@ -1,99 +1,96 @@
-// #include "OSAP_002_T6_source.h"
+#include "OSAP_002_T6_source.h"
 
-//  AvlTree::~AvlTree() {
-//   cout << "AvlTree 종료" << endl;
-//  }
+int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
+    int depth = 0;
+    if (node == nullptr) {/////혹시 몰라서 추가
+        return 0;
+    }
+    while (node->parent != nullptr) {
+        node = node->parent;
+        ++depth;
+    }
 
-// AvlTree::Node* AvlTree::NodeFindByValue(Node* head, int find_data){
-//   if (root == nullptr || root->data == find_data) {
-//       return root;
-//   }
-//   AvlTree::Node* current = root;
-   
-//   while(find_data != current->data){
-//     if(find_data > current->data){
-//       current = current->right;
-//     }else if(find_data < current->data){
-//       current = current->left;
-//     }
-//   }
+    return depth;
+}
 
-//   return current;
-// }
+AvlTree::Node* AvlTreeUtils::MinValueNode(AvlTree::Node* node) {
+    //cout << "오른쪽 subtree중 가장 작은 값을 찾습니다" << endl; ////////////
+    if (node == nullptr) {
+        return node;
+    }
+    AvlTree::Node* temp = node;
+    while (temp && temp->left != nullptr) {
+        temp = temp->left;
+    }
+    return temp;
+}
 
-// //특정 노드의 균형인수 계산
-// int AvlTree::CalculateBalanceFactor(Node* node){
-//   return (node -> left -> height) - (node -> right -> height);
-// }
+AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data) {////////////while 버전
+    while (node != nullptr) {
+        //cout << node->data << endl;
+        if (node->data == find_data) {
+            return node;
+        }
+        else if (node->data > find_data) {
+            node = node->left;
+        }
+        else {
+            node = node->right;
+        }
+    }
+    return node;
+}
 
-// //특정 노드의 높이를 구하는 함수 : node -> height로 접근하면 되기에 주석 처리
-// // int AvlTree::GetSubTreeHeight(Node* node){
-// //   if (node == nullptr){
-// //     return -1;
-// //   }
+void AvlTreeUtils::UpdateHeight(AvlTree::Node* node) {
+    if (node) {
+        node->height = 1 + std::max(node->left ? GetHeight(node->left) : -1, node->right ? GetHeight(node->right) : -1);
+    }
+    return;
+}
 
-// //   return std::max(GetSubTreeHeight(node -> left), GetSubTreeHeight(node -> right)) + 1;
-// // } 
+void AvlTreeUtils::UpdateSize(AvlTree::Node* node) {
+    if (node) {
+        node->size = 1 + AvlTreeUtils::GetSize(node->left) + AvlTreeUtils::GetSize(node->right);
+    }
+}
 
-// // 특정 노드를 기준으로 부모 노드를 거슬러 올라가면서 불균형인 노드를 찾는 함수
-// AvlTree::Node* AvlTree::FindUnbalancedNode (Node* node){
-//   if (node == nullptr){  //root 노드 도달
-//     return nullptr;
-//   }
-//   int balance_factor = CalculateBalanceFactor(node);
-  
-//   if (balance_factor < -1 || balance_factor > 1){
-//     return node;
-//   }
+int AvlTreeUtils::SubtreeHeight(AvlTree::Node* node) {//////////발표전에 밑이랑 합치기
+    if (node == nullptr) {
+        return 0;
+    }
+    return node->height + 1;
+}
 
-//   return FindUnbalancedNode(node -> parent);
-// } 
+int AvlTreeUtils::GetHeight(AvlTree::Node* node) {
+    if (node == nullptr) {
+        return -1;
+    }
+    return node->height;
+}
 
-// //불균형인 노드를 rotate 해주는 함수
-// AvlTree::Node* AvlTree::RR(Node* parent){
-//   Node* temp = parent -> right;
+int AvlTreeUtils::CalculateHeight(AvlTree::Node* node) {
+    if (node == nullptr) {
+        return -1;
+    }
 
-//   parent -> right = temp -> left;
-//   temp -> left = parent;
-//   return temp;
-// }
-// AvlTree::Node* AvlTree::LL(Node* parent){
-//   Node* temp = parent -> left;
+    return max(CalculateHeight(node->left) , CalculateHeight(node->right))+1;
+}
 
-//   parent -> left = temp -> right;
-//   temp -> right = parent;
-//   return temp;
-// }
-// AvlTree::Node* AvlTree::LR(Node* parent){
-//   parent -> left = RR(parent -> left);
-//   return LL(parent);
-    
-// }
-// AvlTree::Node* AvlTree::RL(Node* parent){
-//   parent -> right = LL(parent -> right);
-//   return RR(parent);
-// }
+int AvlTreeUtils::GetSize(AvlTree::Node* node) {
+    if (node == nullptr) {
+        return 0;
+    }
+    return node->size;
+}
 
-// //불균형인 노드를 기준으로 유형에 맞는 rotate 함수를 호출해주는 함수
-// AvlTree::Node* AvlTree::AvlSet(Node* parent){
-//   int parent_balance_factor = CalculateBalanceFactor(parent);
-//   int left_child_balance_factor = CalculateBalanceFactor(parent -> left);
-//   int right_child_balance_factor = CalculateBalanceFactor(parent -> right);
+int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
+    int key_sum = 0;
 
-//   if (parent_balance_factor > 1 && left_child_balance_factor >= 0 ){
-//     return RR(parent);   //RR
-//   }
+    while (node != nullptr) {
+        key_sum += node->data;
+        node = node->parent;
+    }
 
-//   if (parent_balance_factor < -1 && right_child_balance_factor <= 0){
-//     return LL(parent);   //LL
-//   }
-    
-//   if (parent_balance_factor < -1 && right_child_balance_factor < 0){
-//     return LR(parent);   //LR
-//   }
-  
-//   if (parent_balance_factor > 1 && left_child_balance_factor > 0) {
-//     return RL(parent);   //RL
-//   }
-    
-// }
+    return key_sum;
+}
+
