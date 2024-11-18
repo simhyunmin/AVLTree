@@ -433,7 +433,7 @@ void AvlTree::Insert(int insert_data) {
     << "\n";
 }
 
-// Removes target node and rebalances if needed
+// Find target node, delete it and rebalance if needed
 AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data) {
   if (!node) {
     return nullptr;
