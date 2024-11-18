@@ -49,6 +49,8 @@ public:
   void PrintTree() const;
 private:
   Node* root_;
+  AvlTree(const AvlTree&) = delete; 
+  AvlTree& operator=(const AvlTree&) = delete;
 };
 
 class AvlTreeUtils {
