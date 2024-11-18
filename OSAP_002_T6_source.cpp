@@ -583,7 +583,7 @@ void AvlTree::Rank(int target_value) {
   cout << depth_plus_height << " " << rank_value << "\n";
 }
 
-// Recursively calculates rank using binary search
+// Calculate rank using binary search traversal
 int AvlTree::CalculateRank(Node* current_node, int target_value) {
   if (current_node == nullptr) {
     return 0;
