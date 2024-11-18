@@ -45,7 +45,7 @@ public:
   int CalculateRank(Node* node, int x);
 
   // Tree Visualization/Debugging
-  void PrintTreeRecursive(Node* node, string prefix, bool isLeft) const;
+  void PrintTreeRecursive(Node* node, string prefix, bool is_left) const;
   void PrintTree() const;
 private:
   Node* root_;
@@ -60,7 +60,7 @@ public:
   static AvlTree::Node* FindSuccessor(AvlTree::Node* node);
 
   // Path Calculations
-  static int GetPathToRootSum(AvlTree::Node*);
+  static int GetPathToRootSum(AvlTree::Node* node);
 };
 
 class AvlTreeMetrics {
@@ -611,16 +611,16 @@ void AvlTree::PrintTree() const {
   cout << "=======================\n";
 }
 
-void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool isLeft) const {
+void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool is_left) const {
   if (node == nullptr) return;
 
   cout << prefix;
-  cout << (isLeft ? "--- " : "+-- ");
+  cout << (is_left ? "--- " : "+-- ");
 
   cout << node->data << " (h:" << node->height << ")" << " (s:" << node->size << ")" << " (d:" << AvlTreeMetrics::CalculateDepth(node) << ")" << "\n";
 
-  string newPrefix = prefix + (isLeft ? "|   " : "    ");
+  string new_prefix = prefix + (is_left ? "|   " : "    ");
 
-  PrintTreeRecursive(node->left, newPrefix, true);
-  PrintTreeRecursive(node->right, newPrefix, false);
+  PrintTreeRecursive(node->left, new_prefix, true);
+  PrintTreeRecursive(node->right, new_prefix, false);
 }
