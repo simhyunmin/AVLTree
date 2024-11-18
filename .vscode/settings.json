@@ -12,5 +12,23 @@
         "unordered_map": "cpp",
         "ostream": "cpp",
         "__hash_table": "cpp"
-    }
+    },
+    "makefile.configurations": [
+
+        {
+
+            "name": "내 구성",
+
+            "problemMatchers": [
+
+             "$gcc"
+
+            ],
+
+            "makeArgs": ["any", "other", "args", "you", "want"]
+
+        },
+
+    ],
+    "makefile.compileCommandsPath": ".vscode/compile_commands.json"
 }

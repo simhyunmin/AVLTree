@@ -1,25 +1,21 @@
-// #include "OSAP_002_T6_source.h"
+#include "OSAP_002_T6_source.h"
 
-// int GetPathToRootSum(AvlTree::Node *); // 부모 노드로 거슬러 올라가며 key값 더하는 함수
+int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
+    int key_sum = 0;
 
+    while (node != nullptr) {
+        key_sum += node->data;
+        node = node->parent;
+    }
 
-// void AvlTree::Ancestor(int x){  
-//   Node *node = NodeFindByValue(root, x);
-  
-//   int depth = node->depth;
-//   int height = node->height;
-//   int parent_path_sum = GetPathToRootSum(node->parent); 
+    return key_sum;
+}
 
-//   cout << depth + height << " " << parent_path_sum << endl;
-// }
+void AvlTree::Ancestor(int x) {//존재하는 값
+    Node* node = AvlTreeUtils::NodeFindByValue(root, x);
+    int depth = AvlTreeMetrics::CalculateDepth(node);
+    int height = node->height;
+    int parent_path_sum = AvlTreeUtils::GetPathToRootSum(node->parent);
+    cout << depth + height << " " << parent_path_sum << "\n";
+}
 
-// int GetPathToRootSum(AvlTree::Node *node) {  
-//   int key_sum = 0;
-
-//   while(node != nullptr) {   
-//     key_sum += node->data;
-//     node = node->parent;
-//   }
-
-//   return key_sum;
-// }
