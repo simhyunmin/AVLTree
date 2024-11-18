@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <string>
 #include <vector>
+#include <fstream>
 using namespace std;
 
 class AvlTree {
@@ -79,85 +80,56 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
-
-    // ifstream inputFile("sample-Advance.3.in");
+    std::ifstream inputFile("input.txt");
 
     int T;
-    cin >> T;
+    inputFile >> T;
     while (T--) {
         int Q;
-        cin >> Q;
+        inputFile >> Q;
         AvlTree avl_tree;
         for (int i = 0; i < Q; ++i) {
             string command;
-            cin >> command;
+            inputFile >> command;
 
             if (command == "Empty") {
-                // clock_t start1 = clock();
                 avl_tree.Empty();
-                // double end1 = clock() - start1;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-
             }
             else if (command == "Size") {
-                // clock_t start2 = clock();
                 avl_tree.Size();
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "Height") {
-                // clock_t start2 = clock();
                 avl_tree.Height();
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "Insert") {
                 int x;
                 cin >> x;
-                // clock_t start1 = clock();
                 avl_tree.Insert(x);
-                // double end1 = clock() - start1;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "Find") {
                 int x;
                 cin >> x;
-                // clock_t start1 = clock();
                 avl_tree.Find(x); // 노드의 깊이와 높이의 합 출력
-                // double end1 = clock() - start1;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "Ancestor") {
                 int x;
                 cin >> x;
-                // clock_t start2 = clock();
                 avl_tree.Ancestor(x); // 조상 출력
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "Average") {
                 int x;
                 cin >> x;
-                // clock_t start2 = clock();
                 avl_tree.Average(x); // 평균 출력
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "Rank") {
                 int x;
                 cin >> x;
-                // clock_t start2 = clock();
                 avl_tree.Rank(x);
-                //  double end2 = clock() - start2;
-                // cout << ((float)end2) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "Erase") {
                 int x;
                 cin >> x;
-                // clock_t start3 = clock();
                 avl_tree.Erase(x);
-                //  double end3 = clock() - start3;
-                // cout << ((float)end3) / CLOCKS_PER_SEC<< "초" << endl;
             }
             else if (command == "PrintTree") {
                 avl_tree.PrintTree();
@@ -165,20 +137,19 @@ int main() {
             cin.clear();
         }
     }
-    // inputFile.close();
 
     return 0;
 }
+
 int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
     int depth = 0;
-    if (node == nullptr) {/////혹시 몰라서 추가
+    if (node == nullptr) {
         return 0;
     }
     while (node->parent != nullptr) {
         node = node->parent;
         ++depth;
     }
-
     return depth;
 }
 
@@ -194,7 +165,7 @@ int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
 }
 
 AvlTree::Node* AvlTreeUtils::MinValueNode(AvlTree::Node* node) {
-    //cout << "오른쪽 subtree중 가장 작은 값을 찾습니다" << endl; ////////////
+    //cout << "오른쪽 subtree중 가장 작은 값을 찾습니다" << endl; 
     if (node == nullptr) {
         return node;
     }
@@ -206,7 +177,7 @@ AvlTree::Node* AvlTreeUtils::MinValueNode(AvlTree::Node* node) {
 }
 
 
-AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data) {////////////while 버전
+AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data) {//while 버전
     while (node != nullptr) {
         //cout << node->data << endl;
         if (node->data == find_data) {
@@ -271,6 +242,7 @@ void AvlTree::Clear(AvlTree::Node* node) {
         delete node;
     }
 }
+
 //특정 노드의 균형인수 계산
 int AvlTree::CalculateBalanceFactor(AvlTree::Node* node) {
     //cout << "호출" << endl;
@@ -300,7 +272,7 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node) {
     ch->right = parent_node;
     parent_node->left = ch_right;
 
-    if (ch_right) { ch_right->parent = parent_node; }/////////
+    if (ch_right) { ch_right->parent = parent_node; }
     ch->parent = parent_node->parent;
     parent_node->parent = ch;
 
@@ -319,6 +291,7 @@ AvlTree::Node* AvlTree::RightRotate(Node* parent_node) {
     AvlTreeUtils::UpdateSize(ch);
     return ch;
 }
+
 AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
     Node* ch = parent_node->right;
     Node* ch_left = ch->left;
@@ -327,7 +300,7 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
     ch->left = parent_node;
     parent_node->right = ch_left;
 
-    if (ch_left) { ch_left->parent = parent_node; }/////////
+    if (ch_left) { ch_left->parent = parent_node; }
     //각 위치가 바뀐 노드에 대해서 부모 노드 업데이트
     ch->parent = parent_node->parent;
     parent_node->parent = ch;
@@ -343,9 +316,7 @@ AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
     }
     parent_node->height = max(AvlTreeUtils::GetHeight(parent_node->left), AvlTreeUtils::GetHeight(parent_node->right)) + 1;
     ch->height = max(AvlTreeUtils::GetHeight(ch->left), AvlTreeUtils::GetHeight(ch->right)) + 1;
-    ///////
-    AvlTreeUtils::UpdateSize(parent_node);
-    AvlTreeUtils::UpdateSize(ch);
+    
     return ch;
 }
 AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& depth_height_sum, int depth) {
@@ -392,17 +363,18 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& de
 
 void AvlTree::Insert(int insert_data) {
     int depth_height_sum = 0;
-    Node* cNode = AvlTreeUtils::NodeFindByValue(root, insert_data);/////////////
+    Node* cNode = AvlTreeUtils::NodeFindByValue(root, insert_data);
     if (cNode != nullptr) {
         return;
     }
     root = InsertNode(root, insert_data, depth_height_sum, -1);
-    Node* fNode = AvlTreeUtils::NodeFindByValue(root, insert_data);
-    cout << fNode->height + AvlTreeUtils::CalculateDepth(fNode) << "\n";
+  
+    Node* fNode = AvlTreeUtils::NodeFindByValue(root,insert_data);
+    cout << fNode->height + AvlTreeUtils::CalculateDepth(fNode) << endl;
 
 }
-
-AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data) {
+AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data, bool& found) {
+  
     if (!node) {
         return nullptr;
     }
