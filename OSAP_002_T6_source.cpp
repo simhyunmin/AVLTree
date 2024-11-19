@@ -474,6 +474,7 @@ AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data) {
     }
   }
    // Update height/size and check balance
+   // Avoid null pointer errors by rotating only when node is not nullptr.
   if (node) {
     AvlTreeMetrics::UpdateHeight(node);
     AvlTreeMetrics::UpdateSize(node);
