@@ -542,20 +542,20 @@ void AvlTree::Ancestor(int target_value) {
 }
 
 // Prints average of min and max values in subtree rooted at target value
-void AvlTree::Average(int target_value) {
-  Node* sub_tree_root = AvlTreeUtils::FindNodeByValue(root_, target_value);
+void AvlTree::Average(int target_value) { //Get average of mininum and maximum of the tree
+  Node* sub_tree_root = AvlTreeUtils::FindNodeByValue(root_, target_value); //find targe
   
   Node* min_node = sub_tree_root;
-  while (min_node->left != nullptr) {
+  while (min_node->left != nullptr) {//find minimun
     min_node = min_node->left;
   }
 
   Node* max_node = sub_tree_root;
-  while (max_node->right != nullptr) {
+  while (max_node->right != nullptr) {//find maximum
     max_node = max_node->right;
   }
   
-  int average = (min_node->data + max_node->data) / 2;
+  int average = (min_node->data + max_node->data) / 2; //Calculate average
   cout << average << "\n";
 }
 
@@ -572,33 +572,33 @@ void AvlTree::Height() const {
 // Prints sum of node's depth and height, and its rank (or 0 if node not found)
 void AvlTree::Rank(int target_value) {
   Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
-  if (target_node == nullptr) {
+  if (target_node == nullptr) {//When target_value not exist
     cout << 0 << "\n";
     return;
   }
 
-  int depth_plus_height = AvlTreeMetrics::CalculateDepth(target_node) + 
+  int depth_plus_height = AvlTreeMetrics::CalculateDepth(target_node) + //Calculate depth + height 
                          target_node->height;
-  int rank_value = CalculateRank(root_, target_value);
+  int rank_value = CalculateRank(root_, target_value); //Calculate Rank
   
   cout << depth_plus_height << " " << rank_value << "\n";
 }
 
 // Calculate rank using binary search traversal
 int AvlTree::CalculateRank(Node* current_node, int target_value) {
-  if (current_node == nullptr) {
+  if (current_node == nullptr) {//base case: assume size of nullptr for make rank of minimum value of 1
     return 0;
   }
 
-  if (target_value < current_node->data) {
+  if (target_value < current_node->data) {  //move till find the smaller one than target value
     return CalculateRank(current_node->left, target_value);
   }
-  else if (target_value > current_node->data) {
+  else if (target_value > current_node->data) { //add the size of subtree that data is low for target value
     return AvlTreeMetrics::GetSize(current_node->left) + 1 + 
             CalculateRank(current_node->right, target_value);
   }
   else {
-    return AvlTreeMetrics::GetSize(current_node->left) + 1;
+    return AvlTreeMetrics::GetSize(current_node->left) + 1; //add the size of subtree of left
   }
 }
 
