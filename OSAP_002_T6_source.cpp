@@ -6,570 +6,622 @@ using namespace std;
 
 class AvlTree {
 public:
-    AvlTree() : root(nullptr) {};
-    ~AvlTree() { Clear(root); };
+  AvlTree() : root_(nullptr) {};
+  ~AvlTree() { Clear(root_); };
 
-    struct Node {
-        int data;
-        int height;
-        int size;
-        Node* left;
-        Node* right;
-        Node* parent;
+  struct Node {
+    int data;
+    int height;
+    int size;
+    Node* left;
+    Node* right;
+    Node* parent;
 
-        Node(int data_) : data(data_), height(0), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
-    };
-    void Find(int x);
-    Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth);
-    void Insert(int x);
-    // set이 비어 있다면 1을, 아니면 0을 출력한다.
-    void Empty() {
-        cout << ((root == nullptr) ? 1 : 0) << "\n";
-    }
-    //set에 저장된 원소의 수를 출력한다
-    void Size() const {
-        if (root == nullptr) {
-            cout << 0 << "\n";
-            return;
-        }
-        cout << root->size << "\n";
-    }
-    void Height() const;
-    void Ancestor(int x);
-    void Average(int x);
-    void Rank(int x);
-    int CalculateRank(Node* node, int x);
-    Node* EraseNode(Node* node, int x);
-    void Erase(int x);
-    //모든 노드를 삭제해주는 함수 (소멸자 부분에서 호출)
-    void Clear(Node* node);
+    Node(int value) : data(value), height(0), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
+  };
+  // Tree Management
+  void Clear(Node* node); 
 
-    int CalculateBalanceFactor(AvlTree::Node* node); //특정 노드의 균형인수 계산
-    Node* FindUnbalancedNode(AvlTree::Node* node); // 특정 노드를 기준으로 부모 노드를 거슬러 올라가면서 불균형인 노드를 찾는 함수
+  // Basic Tree Operations
+  void Find(int x)const;
+  void Empty() {cout << ((root_ == nullptr) ? 1 : 0) << "\n";} //show whether the tree is empty
+  void Size() const;
+  void Height() const;
 
-    //불균형인 노드를 rotate 해주는 함수
-    Node* RightRotate(AvlTree::Node* node);
-    Node* LeftRotate(AvlTree::Node* node);
-    void PrintTreeRecursive(Node* node, string prefix, bool isLeft);
-    void PrintTree();
+  // Traversal and Statistics
+  void Ancestor(int x);
+  void Average(int x);
+
+  // Insertion Operations
+  Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth);
+  void Insert(int x);
+
+  // Deletion Operations
+  Node* EraseNode(Node* node, int x);
+  void Erase(int x);
+
+  // Ranking Operations
+  void Rank(int x);
+  int CalculateRank(Node* node, int x);
+
+  // Tree Visualization/Debugging
+  void PrintTreeRecursive(Node* node, string prefix, bool is_left) const;
+  void PrintTree() const;
 private:
-    Node* root;  //루트 노드를 가리키는 포인터
+  Node* root_;
+  AvlTree(const AvlTree&) = delete; 
+  AvlTree& operator=(const AvlTree&) = delete;
 };
 
 class AvlTreeUtils {
 public:
-    //Depth 계산 함수
-    static int CalculateDepth(AvlTree::Node* node);
-    //특정 노드를 값에 의해 찾고 반환해주는 함수
-    static AvlTree::Node* NodeFindByValue(AvlTree::Node* node, int value);
-    //부모 노드로 거슬러 올라가며 key값 더하는 함수
-    static int GetPathToRootSum(AvlTree::Node*);
-    static AvlTree::Node* MinValueNode(AvlTree::Node* node);
-    static void UpdateHeight(AvlTree::Node* node);
-    static int SubtreeHeight(AvlTree::Node* node);
-    static int GetHeight(AvlTree::Node* node);
-    static int GetSize(AvlTree::Node* node);
-    static void UpdateSize(AvlTree::Node* node);
-    static int CalculateHeight(AvlTree::Node* node);
+  // Search Operations
+  static AvlTree::Node* FindNodeByValue(AvlTree::Node* node, int value);
+  static AvlTree::Node* FindSuccessor(AvlTree::Node* node);
+
+  // Path Calculations
+  static int GetPathToRootSum(AvlTree::Node* node);
 };
 
+class AvlTreeMetrics {
+public:
+   // Tree Size Operations
+   static void UpdateSize(AvlTree::Node* node);
+   static int GetSize(AvlTree::Node* node);
 
+   // Height and Depth Operations
+   static int CalculateDepth(AvlTree::Node* node);
+   static void UpdateHeight(AvlTree::Node* node);
+   static int GetHeight(AvlTree::Node* node);
+};
+
+class AvlTreeRotate {
+public:
+   // Balance Analysis
+   static int CalculateBalanceFactor(AvlTree::Node* node);
+   static AvlTree::Node* FindUnbalancedNode(AvlTree::Node* node);
+
+   // Rotation Operations
+   static AvlTree::Node* RightRotate(AvlTree::Node* node);
+   static AvlTree::Node* LeftRotate(AvlTree::Node* node);
+};
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cout.tie(nullptr);
+  ios_base::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cout.tie(nullptr);
 
-    // ifstream inputFile("sample-Advance.3.in");
+  int num_test_cases;
+  cin >> num_test_cases;
+  while (num_test_cases--) {
+    int num_queries;
+    cin >> num_queries;
+    AvlTree avl_tree;
+    for (int i = 0; i < num_queries; ++i) {
+      string command;
+      cin >> command;
 
-    int T;
-    cin >> T;
-    while (T--) {
-        int Q;
-        cin >> Q;
-        AvlTree avl_tree;
-        for (int i = 0; i < Q; ++i) {
-            string command;
-            cin >> command;
-
-            if (command == "Empty") {
-                // clock_t start1 = clock();
-                avl_tree.Empty();
-                // double end1 = clock() - start1;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-
-            }
-            else if (command == "Size") {
-                // clock_t start2 = clock();
-                avl_tree.Size();
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "Height") {
-                // clock_t start2 = clock();
-                avl_tree.Height();
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "Insert") {
-                int x;
-                cin >> x;
-                // clock_t start1 = clock();
-                avl_tree.Insert(x);
-                // double end1 = clock() - start1;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "Find") {
-                int x;
-                cin >> x;
-                // clock_t start1 = clock();
-                avl_tree.Find(x); // 노드의 깊이와 높이의 합 출력
-                // double end1 = clock() - start1;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "Ancestor") {
-                int x;
-                cin >> x;
-                // clock_t start2 = clock();
-                avl_tree.Ancestor(x); // 조상 출력
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "Average") {
-                int x;
-                cin >> x;
-                // clock_t start2 = clock();
-                avl_tree.Average(x); // 평균 출력
-                // double end1 = clock() - start2;
-                // cout << ((float)end1) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "Rank") {
-                int x;
-                cin >> x;
-                // clock_t start2 = clock();
-                avl_tree.Rank(x);
-                //  double end2 = clock() - start2;
-                // cout << ((float)end2) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "Erase") {
-                int x;
-                cin >> x;
-                // clock_t start3 = clock();
-                avl_tree.Erase(x);
-                //  double end3 = clock() - start3;
-                // cout << ((float)end3) / CLOCKS_PER_SEC<< "초" << endl;
-            }
-            else if (command == "PrintTree") {
-                avl_tree.PrintTree();
-            }
-            cin.clear();
-        }
+      if (command == "Empty") {
+        avl_tree.Empty();
+      }
+      else if (command == "Size") {
+        avl_tree.Size();
+      }
+      else if (command == "Height") {
+        avl_tree.Height();
+      }
+      else if (command == "Insert") {
+        int x;
+        cin >> x;
+        avl_tree.Insert(x);
+      }
+      else if (command == "Find") {
+        int x;
+        cin >> x;
+        avl_tree.Find(x);
+      }
+      else if (command == "Ancestor") {
+        int x;
+        cin >> x;
+        avl_tree.Ancestor(x);
+      }
+      else if (command == "Average") {
+        int x;
+        cin >> x;
+        avl_tree.Average(x);
+      }
+      else if (command == "Rank") {
+        int x;
+        cin >> x;
+        avl_tree.Rank(x);
+      }
+      else if (command == "Erase") {
+        int x;
+        cin >> x;
+        avl_tree.Erase(x);
+      }
+      else if (command == "PrintTree") {
+        avl_tree.PrintTree();
+      }
+      cin.clear();
     }
-    // inputFile.close();
+  }
 
+  return 0;
+}
+
+// Returns the depth (distance from root) of the given node by counting parent links
+int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
+  int depth = 0;
+  if (node == nullptr) {
     return 0;
-}
-int AvlTreeUtils::CalculateDepth(AvlTree::Node* node) {
-    int depth = 0;
-    if (node == nullptr) {/////혹시 몰라서 추가
-        return 0;
-    }
-    while (node->parent != nullptr) {
-        node = node->parent;
-        ++depth;
-    }
+  }
+  while (node->parent != nullptr) {
+    node = node->parent;
+    ++depth;
+  }
 
-    return depth;
+  return depth;
 }
 
+// Calculates sum of node values from current node to root by following parent links
 int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
-    int key_sum = 0;
+  int key_sum = 0;
 
-    while (node != nullptr) {
-        key_sum += node->data;
-        node = node->parent;
-    }
+  while (node != nullptr) {
+    key_sum += node->data;
+    node = node->parent;
+  }
 
-    return key_sum;
+  return key_sum;
 }
 
-AvlTree::Node* AvlTreeUtils::MinValueNode(AvlTree::Node* node) {
-    //cout << "오른쪽 subtree중 가장 작은 값을 찾습니다" << endl; ////////////
-    if (node == nullptr) {
-        return node;
-    }
-    AvlTree::Node* temp = node;
-    while (temp && temp->left != nullptr) {
-        temp = temp->left;
-    }
-    return temp;
-}
-
-
-AvlTree::Node* AvlTreeUtils::NodeFindByValue(AvlTree::Node* node, int find_data) {////////////while 버전
-    while (node != nullptr) {
-        //cout << node->data << endl;
-        if (node->data == find_data) {
-            return node;
-        }
-        else if (node->data > find_data) {
-            node = node->left;
-        }
-        else {
-            node = node->right;
-        }
-    }
+// Finds leftmost node in the subtree (smallest value successor) of given node
+AvlTree::Node* AvlTreeUtils::FindSuccessor(AvlTree::Node* node) {
+  if (node == nullptr) {
     return node;
+  }
+  AvlTree::Node* temp = node;
+  while (temp && temp->left != nullptr) {
+    temp = temp->left;
+  }
+  return temp;
 }
 
-void AvlTreeUtils::UpdateHeight(AvlTree::Node* node) {
-    if (node) {
-        node->height = 1 + std::max(node->left ? GetHeight(node->left) : -1, node->right ? GetHeight(node->right) : -1);
+// Traverses tree to find node with given value using binary search
+AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node, int find_data) {
+  while (node != nullptr) {
+    if (node->data == find_data) {
+      return node;
+    } else if (node->data > find_data) {
+      node = node->left;
+    } else {
+      node = node->right;
     }
+  }
+  return node;
+}
+
+// Updates node's height as max height between left and right child plus 1
+void AvlTreeMetrics::UpdateHeight(AvlTree::Node* node) {
+  if (node == nullptr) {
     return;
+  }
+  node->height = 1 + std::max(
+    node->left ? GetHeight(node->left) : -1,
+    node->right ? GetHeight(node->right) : -1
+  );
 }
 
-void AvlTreeUtils::UpdateSize(AvlTree::Node* node) {
-    if (node) {
-        node->size = 1 + AvlTreeUtils::GetSize(node->left) + AvlTreeUtils::GetSize(node->right);
-    }
+// Updates node's size as sum of left and right subtree sizes plus 1
+void AvlTreeMetrics::UpdateSize(AvlTree::Node* node) {
+  if (node == nullptr) {
+    return;
+  }
+  node->size = 1 + GetSize(node->left) + GetSize(node->right);
 }
 
-int AvlTreeUtils::SubtreeHeight(AvlTree::Node* node) {//////////발표전에 밑이랑 합치기
-    if (node == nullptr) {
-        return 0;
-    }
-    return node->height + 1;
+// Returns node's height, -1 for null node
+int AvlTreeMetrics::GetHeight(AvlTree::Node* node) {
+  if (node == nullptr) {
+    return -1;
+  }
+  return node->height;
 }
 
-int AvlTreeUtils::GetHeight(AvlTree::Node* node) {
-    if (node == nullptr) {
-        return -1;
-    }
-    return node->height;
+// Returns node's size, 0 for null node
+int AvlTreeMetrics::GetSize(AvlTree::Node* node) {
+  if (node == nullptr) {
+    return 0;
+  }
+  return node->size;
 }
 
-int AvlTreeUtils::CalculateHeight(AvlTree::Node* node) {
-    if (node == nullptr) {
-        return -1;
-    }
-
-    return max(CalculateHeight(node->left) , CalculateHeight(node->right))+1;
+// Print total number of nodes in tree
+void AvlTree::Size() const {
+  if (root_ == nullptr) {
+    cout << 0 << "\n";
+    return;
+  }
+  cout << root_->size << "\n";
 }
 
-int AvlTreeUtils::GetSize(AvlTree::Node* node) {
-    if (node == nullptr) {
-        return 0;
-    }
-    return node->size;
-}
-
+// Post-order traversal to delete all nodes in the tree
 void AvlTree::Clear(AvlTree::Node* node) {
-    if (node != nullptr) {
-        Clear(node->left);
-        Clear(node->right);
-        delete node;
-    }
-}
-//특정 노드의 균형인수 계산
-int AvlTree::CalculateBalanceFactor(AvlTree::Node* node) {
-    //cout << "호출" << endl;
-    if (node == nullptr) { return 0; }
-    //cout << "호출2: " << node->data << endl;
-    return AvlTreeUtils::SubtreeHeight(node->left) - AvlTreeUtils::SubtreeHeight(node->right);
+  if (node != nullptr) {
+    Clear(node->left);
+    Clear(node->right);
+    delete node;
+  }
 }
 
-AvlTree::Node* AvlTree::FindUnbalancedNode(AvlTree::Node* node) {
-    if (node == nullptr) {  //불균형인 노드가 없는 경우
-        return nullptr;
-    }
-    int balance_factor = CalculateBalanceFactor(node);
-
-    if (balance_factor < -1 || balance_factor > 1) {
-        return node;
-    }
-
-    return FindUnbalancedNode(node->parent);
+// Returns balance factor (left height - right height) of node
+int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node* node) {
+  if (node == nullptr) {
+    return 0;
+  }
+  
+  int left_height = (node->left) ? node->left->height : -1;
+  int right_height = (node->right) ? node->right->height : -1;
+  return left_height - right_height;
 }
 
-//불균형인 노드를 rotate 해주는 함수
-AvlTree::Node* AvlTree::RightRotate(Node* parent_node) {
-    Node* ch = parent_node->left;
-    Node* ch_right = ch->right;
+// Finds ancestor node that violates AVL balance property
+AvlTree::Node* AvlTreeRotate::FindUnbalancedNode(AvlTree::Node* node) {
+  if (node == nullptr) {
+    return nullptr;
+  }
+  int balance_factor = CalculateBalanceFactor(node);
 
-    ch->right = parent_node;
-    parent_node->left = ch_right;
-
-    if (ch_right) { ch_right->parent = parent_node; }/////////
-    ch->parent = parent_node->parent;
-    parent_node->parent = ch;
-
-    if (ch->parent) {
-        if (ch->parent->left == parent_node) {
-            ch->parent->left = ch;
-        }
-        else {
-            ch->parent->right = ch;
-        }
-    }
-    parent_node->height = max(AvlTreeUtils::GetHeight(parent_node->left), AvlTreeUtils::GetHeight(parent_node->right)) + 1;
-    ch->height = max(AvlTreeUtils::GetHeight(ch->left), AvlTreeUtils::GetHeight(ch->right)) + 1;
-
-    AvlTreeUtils::UpdateSize(parent_node);
-    AvlTreeUtils::UpdateSize(ch);
-    return ch;
-}
-AvlTree::Node* AvlTree::LeftRotate(Node* parent_node) {
-    Node* ch = parent_node->right;
-    Node* ch_left = ch->left;
-    //부모 노드의 오른쪽 자식의 왼쪽 자식을 부모 노드로 설정
-    //원래 부모 노드의 오른쪽 자식의 왼쪽 자식을 원래 부모 노드의 오른쪽 자식으로 설정
-    ch->left = parent_node;
-    parent_node->right = ch_left;
-
-    if (ch_left) { ch_left->parent = parent_node; }/////////
-    //각 위치가 바뀐 노드에 대해서 부모 노드 업데이트
-    ch->parent = parent_node->parent;
-    parent_node->parent = ch;
-
-
-    if (ch->parent) {
-        if (ch->parent->left == parent_node) {
-            ch->parent->left = ch;
-        }
-        else {
-            ch->parent->right = ch;
-        }
-    }
-    parent_node->height = max(AvlTreeUtils::GetHeight(parent_node->left), AvlTreeUtils::GetHeight(parent_node->right)) + 1;
-    ch->height = max(AvlTreeUtils::GetHeight(ch->left), AvlTreeUtils::GetHeight(ch->right)) + 1;
-    ///////
-    AvlTreeUtils::UpdateSize(parent_node);
-    AvlTreeUtils::UpdateSize(ch);
-    return ch;
-}
-AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data, int& depth_height_sum, int depth) {
-    if (!node) {
-        depth_height_sum = depth + 1;
-        return new Node(insert_data);
-    }
-    if (insert_data < node->data) {
-        node->left = InsertNode(node->left, insert_data, depth_height_sum, depth + 1);
-        node->left->parent = node;
-    }
-    else if (insert_data > node->data) {
-        node->right = InsertNode(node->right, insert_data, depth_height_sum, depth + 1);
-        node->right->parent = node;
-    }
-
-    AvlTreeUtils::UpdateHeight(node);
-    AvlTreeUtils::UpdateSize(node);
-
-    int balance = CalculateBalanceFactor(node);
-    int left_child_balance = CalculateBalanceFactor(node->left); // 왼쪽 자식 노드의 균형 인수 계산
-    int right_child_balance = CalculateBalanceFactor(node->right); // 오른쪽 자식 노드의 균형 인수 계산
-
-    if (balance > 1 && left_child_balance >= 0) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
-        return RightRotate(node);
-    }
-
-    if (balance < -1 && right_child_balance <= 0) { // 오른쪽으로 불균형이 생겼을 경우 왼쪽 회전
-        return LeftRotate(node);
-    }
-
-    if (balance > 1 && left_child_balance < 0) { // 왼쪽-오른쪽 불균형일 경우 왼쪽 회전 후 오른쪽 회전
-        LeftRotate(node->left);
-        return RightRotate(node);
-    }
-
-    if (balance < -1 && right_child_balance > 0) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
-        RightRotate(node->right);
-        return LeftRotate(node);
-    }
-
+  if (balance_factor < -1 || balance_factor > 1) {
     return node;
+  }
+
+  return FindUnbalancedNode(node->parent);
 }
 
+// Performs right rotation around parent_node and updates height/size of affected nodes
+AvlTree::Node* AvlTreeRotate::RightRotate(AvlTree::Node* parent_node) {
+  AvlTree::Node* child = parent_node->left;
+  AvlTree::Node* child_right = child->right;
+
+  // Perform rotation
+  child->right = parent_node;
+  parent_node->left = child_right;
+
+  // Update parent pointers
+  if (child_right) {
+    child_right->parent = parent_node;
+  }
+
+  child->parent = parent_node->parent;
+  parent_node->parent = child;
+
+  // Fix parent's child pointer
+  if (child->parent) {
+    if (child->parent->left == parent_node) {
+      child->parent->left = child;
+    } else {
+      child->parent->right = child;
+    }
+  }
+
+  // Update height and size of affected nodes
+  parent_node->height = max(
+    AvlTreeMetrics::GetHeight(parent_node->left),
+    AvlTreeMetrics::GetHeight(parent_node->right)
+  ) + 1;
+
+  child->height = max(
+    AvlTreeMetrics::GetHeight(child->left),
+    AvlTreeMetrics::GetHeight(child->right)
+  ) + 1;
+
+  AvlTreeMetrics::UpdateSize(parent_node);
+  AvlTreeMetrics::UpdateSize(child);
+
+  return child;
+}
+
+// Performs left rotation around parent_node and updates height/size of affected nodes
+AvlTree::Node* AvlTreeRotate::LeftRotate(AvlTree::Node* parent_node) {
+  AvlTree::Node* child = parent_node->right;
+  AvlTree::Node* child_left = child->left;
+
+  // Perform rotation
+  child->left = parent_node;
+  parent_node->right = child_left;
+  
+  // Update parent pointers
+  if (child_left) {
+    child_left->parent = parent_node;
+  }
+
+  child->parent = parent_node->parent;
+  parent_node->parent = child;
+
+  // Fix parent's child pointer
+  if (child->parent) {
+    if (child->parent->left == parent_node) {
+      child->parent->left = child;
+    } else {
+      child->parent->right = child;
+    }
+  }
+
+  // Update height and size of affected nodes
+  parent_node->height = max(
+    AvlTreeMetrics::GetHeight(parent_node->left),
+    AvlTreeMetrics::GetHeight(parent_node->right)
+  ) + 1;
+
+  child->height = max(
+    AvlTreeMetrics::GetHeight(child->left),
+    AvlTreeMetrics::GetHeight(child->right)
+  ) + 1;
+
+  AvlTreeMetrics::UpdateSize(parent_node);
+  AvlTreeMetrics::UpdateSize(child);
+
+  return child;
+}
+
+// Binary search to insertion point and rebalance if needed
+AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data,
+                                int& depth_height_sum, int depth) {
+  if (!node) {
+    depth_height_sum = depth + 1;
+    return new Node(insert_data);
+  }
+
+  // Find insertion position using binary search
+  if (insert_data < node->data) {
+    node->left = InsertNode(node->left, insert_data,
+                         depth_height_sum, depth + 1);
+    node->left->parent = node;
+  } else if (insert_data > node->data) {
+    node->right = InsertNode(node->right, insert_data,
+                          depth_height_sum, depth + 1);
+    node->right->parent = node;
+  }
+
+  // Update node properties
+  AvlTreeMetrics::UpdateHeight(node);
+  AvlTreeMetrics::UpdateSize(node);
+
+  // Check balance factors
+  int balance = AvlTreeRotate::CalculateBalanceFactor(node);
+  int left_child_balance =
+    AvlTreeRotate::CalculateBalanceFactor(node->left);
+  int right_child_balance =
+    AvlTreeRotate::CalculateBalanceFactor(node->right);
+
+  // Single right rotation
+  if (balance > 1 && left_child_balance >= 0) {
+    return AvlTreeRotate::RightRotate(node);
+  }
+
+  // Single left rotation
+  if (balance < -1 && right_child_balance <= 0) {
+    return AvlTreeRotate::LeftRotate(node);
+  }
+  // Left-Right rotation
+  if (balance > 1 && left_child_balance < 0) {
+    AvlTreeRotate::LeftRotate(node->left);
+    return AvlTreeRotate::RightRotate(node);
+  }
+  // Right-Left rotation
+  if (balance < -1 && right_child_balance > 0) {
+    AvlTreeRotate::RightRotate(node->right);
+    return AvlTreeRotate::LeftRotate(node);
+  }
+
+  return node;
+}
+
+// Inserts value and prints sum of inserted node's height and depth
 void AvlTree::Insert(int insert_data) {
-    int depth_height_sum = 0;
-    Node* cNode = AvlTreeUtils::NodeFindByValue(root, insert_data);/////////////
-    if (cNode != nullptr) {
-        return;
-    }
-    root = InsertNode(root, insert_data, depth_height_sum, -1);
-    Node* fNode = AvlTreeUtils::NodeFindByValue(root, insert_data);
-    cout << fNode->height + AvlTreeUtils::CalculateDepth(fNode) << "\n";
-
+  int depth_height_sum = 0;
+  
+  Node* current_node = AvlTreeUtils::FindNodeByValue(root_, insert_data);
+  if (current_node != nullptr) {
+    return;
+  }
+  root_ = InsertNode(root_, insert_data, depth_height_sum, -1);
+  Node* found_node = AvlTreeUtils::FindNodeByValue(root_, insert_data);
+  cout << found_node->height + AvlTreeMetrics::CalculateDepth(found_node) 
+    << "\n";
 }
 
+// Find target node, delete it and rebalance if needed
 AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data) {
-    if (!node) {
-        return nullptr;
-    }
-    //cout << "moving, current loc: " << node->data << endl;
-    if (erase_data < node->data) { // 왼쪽 서브트리에 있을 경우
-        //cout << "moving to left" << endl;
-        node->left = EraseNode(node->left, erase_data);
-    }
-    else if (erase_data > node->data) { // 오른쪽 서브트리에 있을 경우
-        //cout << "moving to right" << endl;
-        node->right = EraseNode(node->right, erase_data);
-    }
-    else { //삭제할 노드인 경우
-        //cout << "find node to erase" << node->data << endl;
-        if (!node->left || !node->right) { // 자식이 하나 이하인 경우
-            if (node->left && !(node->right)) {
-                node->data = node->left->data;
-                delete node->left;
-                node->left = nullptr;
-            }
-            else if (!(node->left) && node->right) {
-                node->data = node->right->data;
-                delete node->right;
-                node->right = nullptr;
-            }
-            else {//무자식
-                if (node->parent) {
-                    if (node->parent->left == node) {
-                        node->parent->left = nullptr;
-                    }
-                    else if(node->parent->right == node){
-                        node->parent->right = nullptr;
-                    }
-                }
-                delete node;
-                node = nullptr;
-            }     
+  if (!node) {
+    return nullptr;
+  }
+  if (erase_data < node->data) {
+    node->left = EraseNode(node->left, erase_data);
+  } else if (erase_data > node->data) {
+    node->right = EraseNode(node->right, erase_data);
+  } else {
+    // Case 1: Node has at most one child
+    if (!node->left || !node->right) {
+      if (node->left && !(node->right)) {
+        node->data = node->left->data;
+        delete node->left;
+        node->left = nullptr;
+      } else if (!(node->left) && node->right) {
+        node->data = node->right->data;
+        delete node->right;
+        node->right = nullptr;
+      } else {
+       // Leaf node case
+        if (node->parent) {
+          if (node->parent->left == node) {
+            node->parent->left = nullptr;
+          } else if (node->parent->right == node) {
+            node->parent->right = nullptr;
+          }
         }
-        else { //자식이 둘인 경우
-            //후임자 노드 찾기
-            Node* temp = AvlTreeUtils::MinValueNode(node->right);
+        delete node;
+        node = nullptr;
+      }
+    } 
+    // Case 2: Node has two children
+    else {
+      Node* temp = AvlTreeUtils::FindSuccessor(node->right);
+      node->data = temp->data;
+      EraseNode(node->right, temp->data);
+    }
+  }
+   // Update height/size and check balance
+   // Avoid null pointer errors by rotating only when node is not nullptr.
+  if (node) {
+    AvlTreeMetrics::UpdateHeight(node);
+    AvlTreeMetrics::UpdateSize(node);
+    int balance = AvlTreeRotate::CalculateBalanceFactor(node);
+    int left_child_balance = AvlTreeRotate::CalculateBalanceFactor(node->left);
+    int right_child_balance = AvlTreeRotate::CalculateBalanceFactor(node->right);
 
-            node->data = temp->data;
-            EraseNode(node->right, temp->data);
-        }
+    // Single right rotation
+    if (balance > 1 && left_child_balance >= 0) {
+      return AvlTreeRotate::RightRotate(node);
     }
-
-    if (node) {
-        AvlTreeUtils::UpdateHeight(node);
-        AvlTreeUtils::UpdateSize(node);
-        int balance = CalculateBalanceFactor(node);
-        int left_child_balance = CalculateBalanceFactor(node->left); // 왼쪽 자식 노드의 균형 인수 계산
-        int right_child_balance = CalculateBalanceFactor(node->right); // 오른쪽 자식 노드의 균형 인수 계산
-        if (balance > 1 && left_child_balance >= 0) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
-            return RightRotate(node);
-        }
-        if (balance < -1 && right_child_balance <= 0) { // 오른쪽으로 불균형이 생겼을 경우 왼쪽 회전
-            return LeftRotate(node);
-        }
-        if (balance > 1 && left_child_balance < 0) { // 왼쪽-오른쪽 불균형일 경우 왼쪽 회전 후 오른쪽 회전
-            LeftRotate(node->left);
-            return RightRotate(node);
-        }
-        if (balance < -1 && right_child_balance > 0) { // 왼쪽으로 불균형이 생겼을 경우 오른쪽 회전
-            RightRotate(node->right);
-            return LeftRotate(node);
-        }
+    // Single left rotation
+    if (balance < -1 && right_child_balance <= 0) {
+      return AvlTreeRotate::LeftRotate(node);
     }
-    return node;
+    // Left-Right rotation
+    if (balance > 1 && left_child_balance < 0) {
+      AvlTreeRotate::LeftRotate(node->left);
+      return AvlTreeRotate::RightRotate(node);
+    }
+    // Right-Left rotation
+    if (balance < -1 && right_child_balance > 0) {
+      AvlTreeRotate::RightRotate(node->right);
+      return AvlTreeRotate::LeftRotate(node);
+    }
+  }
+  return node;
 }
 
-void AvlTree::Erase(int x) {
-    Node* node = AvlTreeUtils::NodeFindByValue(root, x);
-    if (node == nullptr) {
-        cout << 0 << "\n";
-        return;
-    }
-    int depth_height_sum = node->height + AvlTreeUtils::CalculateDepth(node);
-    cout << depth_height_sum << "\n";
-    root = EraseNode(root, x);
+// Erases value and prints sum of target node's height and depth
+void AvlTree::Erase(int value_to_erase) {
+  Node* target_node = AvlTreeUtils::FindNodeByValue(root_, value_to_erase);
+  if (target_node == nullptr) {
+    cout << 0 << "\n";
+    return;
+  }
+
+  int depth_height_sum = target_node->height +
+                       AvlTreeMetrics::CalculateDepth(target_node);
+  cout << depth_height_sum << "\n";
+  root_ = EraseNode(root_, value_to_erase);
 }
 
-void AvlTree::Find(int x) {
-    Node* node = AvlTreeUtils::NodeFindByValue(root, x);
-    cout << ((node != nullptr) ? AvlTreeUtils::CalculateDepth(node) + node->height : 0) << "\n";
+// Prints sum of target node's height and depth if found, 0 otherwise
+void AvlTree::Find(int target_value) const {
+  Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
+  int result = 0;
+  
+  if (target_node != nullptr) {
+    result = AvlTreeMetrics::CalculateDepth(target_node) + 
+             target_node->height;
+  }
+  
+  cout << result << "\n";
 }
 
-void AvlTree::Ancestor(int x) {//존재하는 값
-    Node* node = AvlTreeUtils::NodeFindByValue(root, x);
-    int depth = AvlTreeUtils::CalculateDepth(node);
-    int height = node->height;
-    int parent_path_sum = AvlTreeUtils::GetPathToRootSum(node->parent);
-    cout << depth + height << " " << parent_path_sum << "\n";
+// Prints height+depth sum and path sum to root from parent
+void AvlTree::Ancestor(int target_value) {
+  Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
+  int depth = AvlTreeMetrics::CalculateDepth(target_node);
+  int height = target_node->height;
+  int parent_path_sum = AvlTreeUtils::GetPathToRootSum(target_node->parent);
+  
+  cout << depth + height << " " << parent_path_sum << "\n";
 }
 
-void AvlTree::Average(int x) {
-    Node* sub_tree_root = AvlTreeUtils::NodeFindByValue(root, x);
-    Node* min_node = sub_tree_root;
-    while (min_node->left != NULL) {
-        min_node = min_node->left;
-    }
+// Prints average of min and max values in subtree rooted at target value
+void AvlTree::Average(int target_value) { //Get average of mininum and maximum of the tree
+  Node* sub_tree_root = AvlTreeUtils::FindNodeByValue(root_, target_value); //find targe
+  
+  Node* min_node = sub_tree_root;
+  while (min_node->left != nullptr) {//find minimun
+    min_node = min_node->left;
+  }
 
-    Node* max_node = sub_tree_root;
-    while (max_node->right != NULL) {
-        max_node = max_node->right;
-    }
-    cout << (min_node->data + max_node->data) / 2 << "\n";
+  Node* max_node = sub_tree_root;
+  while (max_node->right != nullptr) {//find maximum
+    max_node = max_node->right;
+  }
+  
+  int average = (min_node->data + max_node->data) / 2; //Calculate average
+  cout << average << "\n";
 }
 
+// Prints tree height, -1 if empty
 void AvlTree::Height() const {
-    if (root == nullptr) {
-        cout << -1 << "\n";
-    }
-    else {
-        cout << root->height << "\n";
-    }
+  if (root_ == nullptr) {
+    cout << -1 << "\n";
+    return;
+  }
+
+  cout << root_->height << "\n";
 }
 
-void AvlTree::Rank(int x) {
-    Node* node = AvlTreeUtils::NodeFindByValue(root, x);
-    if (node == nullptr) {//비어있을 경우 , 루트인 경우, 일반 경우
-        cout << 0 << "\n";
-        return;
-    }
+// Prints sum of node's depth and height, and its rank (or 0 if node not found)
+void AvlTree::Rank(int target_value) {
+  Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
+  if (target_node == nullptr) {//When target_value not exist
+    cout << 0 << "\n";
+    return;
+  }
 
-    int depth_plus_height_sum = AvlTreeUtils::CalculateDepth(node) + node->height;
-    cout << depth_plus_height_sum << " " << CalculateRank(root, x) << "\n";
+  int depth_plus_height = AvlTreeMetrics::CalculateDepth(target_node) + //Calculate depth + height 
+                         target_node->height;
+  int rank_value = CalculateRank(root_, target_value); //Calculate Rank
+  
+  cout << depth_plus_height << " " << rank_value << "\n";
 }
 
-int AvlTree::CalculateRank(Node* node, int x) {
-    if (node == nullptr) {
-        return 0;
-    }
+// Calculate rank using binary search traversal
+int AvlTree::CalculateRank(Node* current_node, int target_value) {
+  if (current_node == nullptr) {//base case: assume size of nullptr for make rank of minimum value of 1
+    return 0;
+  }
 
-    if (x < node->data) {
-        return CalculateRank(node->left, x);
-    }
-    else if (x > node->data) {
-        return AvlTreeUtils::GetSize(node->left) + 1 + CalculateRank(node->right, x);
-    }
-    else {
-        return AvlTreeUtils::GetSize(node->left) + 1;
-    }
+  if (target_value < current_node->data) {  //move till find the smaller one than target value
+    return CalculateRank(current_node->left, target_value);
+  }
+  else if (target_value > current_node->data) { //add the size of subtree that data is low for target value
+    return AvlTreeMetrics::GetSize(current_node->left) + 1 + 
+            CalculateRank(current_node->right, target_value);
+  }
+  else {
+    return AvlTreeMetrics::GetSize(current_node->left) + 1; //add the size of subtree of left
+  }
 }
 
-void AvlTree::PrintTree() {
-    cout << "\n=== Tree Visualization ===\n";
-    if (root == nullptr) {
-        cout << "Empty tree\n";
-        return;
-    }
-    PrintTreeRecursive(root, "", true);
-    cout << "=======================\n";
+void AvlTree::PrintTree() const {
+  cout << "\n=== Tree Visualization ===\n";
+  if (root_ == nullptr) {
+    cout << "Empty tree\n";
+    return;
+  }
+  PrintTreeRecursive(root_, "", true);
+  cout << "=======================\n";
 }
-void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool isLeft) {
-    if (node == nullptr) return;
 
-    cout << prefix;
-    cout << (isLeft ? "--- " : "+-- ");
+void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool is_left) const {
+  if (node == nullptr) return;
 
-    // 노드의 값과 높이 출력
-    cout << node->data << " (h:" << AvlTreeUtils::CalculateHeight(node) << ")" << " (s:" << node->size << ")" << " (d:" << AvlTreeUtils::CalculateDepth(node) << ")" << "\n";
+  cout << prefix;
+  cout << (is_left ? "--- " : "+-- ");
 
-    // 자식 노드 출력을 위한 새로운 prefix 생성
-    string newPrefix = prefix + (isLeft ? "|   " : "    ");
+  cout << node->data << " (h:" << node->height << ")" << " (s:" << node->size << ")" << " (d:" << AvlTreeMetrics::CalculateDepth(node) << ")" << "\n";
 
-    // 왼쪽 자식을 먼저 출력한 후 오른쪽 자식 출력
-    PrintTreeRecursive(node->left, newPrefix, true);
-    PrintTreeRecursive(node->right, newPrefix, false);
+  string new_prefix = prefix + (is_left ? "|   " : "    ");
+
+  PrintTreeRecursive(node->left, new_prefix, true);
+  PrintTreeRecursive(node->right, new_prefix, false);
 }

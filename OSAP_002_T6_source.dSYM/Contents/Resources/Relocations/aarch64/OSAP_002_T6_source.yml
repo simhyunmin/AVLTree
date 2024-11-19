@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     "/Users/simhyeonmin/Documents/오소응 팀프로젝트/OSAP_002_T6_source"
+relocations:     []
+...
