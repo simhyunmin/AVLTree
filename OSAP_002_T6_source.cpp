@@ -24,7 +24,7 @@ public:
 
   // Basic Tree Operations
   void Find(int x)const;
-  void Empty() {cout << ((root_ == nullptr) ? 1 : 0) << "\n";}
+  void Empty() {cout << ((root_ == nullptr) ? 1 : 0) << "\n";} //show whether the tree is empty
   void Size() const;
   void Height() const;
 
