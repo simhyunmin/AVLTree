@@ -16,8 +16,8 @@ public:
     Node* left;
     Node* right;
     Node* parent;
-
-    Node(int value) : data(value), height(0), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
+//////////////change height to 1
+    Node(int value) : data(value), height(1), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
   };
   // Tree Management
   void Clear(Node* node); 
@@ -208,8 +208,8 @@ void AvlTreeMetrics::UpdateHeight(AvlTree::Node* node) {
     return;
   }
   node->height = 1 + std::max(
-    node->left ? GetHeight(node->left) : -1,
-    node->right ? GetHeight(node->right) : -1
+    node->left ? GetHeight(node->left) : 0,//////////// change basic case to 0
+    node->right ? GetHeight(node->right) : 0
   );
 }
 
@@ -224,7 +224,7 @@ void AvlTreeMetrics::UpdateSize(AvlTree::Node* node) {
 // Returns node's height, -1 for null node
 int AvlTreeMetrics::GetHeight(AvlTree::Node* node) {
   if (node == nullptr) {
-    return -1;
+    return 0; ////////////////change base case to 0
   }
   return node->height;
 }
@@ -260,9 +260,9 @@ int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node* node) {
   if (node == nullptr) {
     return 0;
   }
-  
-  int left_height = (node->left) ? node->left->height : -1;
-  int right_height = (node->right) ? node->right->height : -1;
+  //make base to 0
+  int left_height = (node->left) ? node->left->height : 0;
+  int right_height = (node->right) ? node->right->height : 0;
   return left_height - right_height;
 }
 
@@ -371,7 +371,10 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data,
                                 int& depth_height_sum, int depth) {
   if (!node) {
     depth_height_sum = depth + 1;
-    return new Node(insert_data);
+    Node* newNode = new Node(insert_data);//////////////////////////////////////////////
+    AvlTreeMetrics::UpdateHeight(newNode);
+    AvlTreeMetrics::UpdateSize(newNode);////////////////the case root come in as parameter don't update height properly so add this 
+    return newNode;
   }
 
   // Find insertion position using binary search
