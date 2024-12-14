@@ -1,3 +1,30 @@
+/*
+MIT License
+
+Copyright (c) 2024 INHA_OSAP_002_T6
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Author: INHA_OSAP_002_T6
+Date: 2024-11-20
+*/
+
 #ifndef OSAP_002_T6_SOURCE_H
 #define OSAP_002_T6_SOURCE_H
 
@@ -9,75 +36,93 @@ using namespace std;
 
 class AvlTree {
 public:
-    AvlTree() : root(nullptr) {};
-    ~AvlTree() { Clear(root); };
+  AvlTree() : root_(nullptr) {};
+  ~AvlTree() { Clear(root_); };
 
-    struct Node {
-        int data;
-        int height;
-        int size;
-        Node* left;
-        Node* right;
-        Node* parent;
+  struct Node {
+    int data;
+    int height;
+    int size;
+    Node* left;
+    Node* right;
+    Node* parent;
 
-        Node(int data_) : data(data_), height(0), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
-    };
+    Node(int value) : data(value), height(0), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
+  };
+  // Tree Management
+  void Clear(Node* node); 
 
-    void Clear(Node* node); //모든 노드를 삭제해주는 함수 (소멸자 부분에서 호출)
+  // Basic Tree Operations
+  void Find(int x)const;
+  void Empty() {cout << ((root_ == nullptr) ? 1 : 0) << "\n";}
+  void Size() const;
+  void Height() const;
 
+  // Traversal and Statistics
+  void Ancestor(int x);
+  void Average(int x);
 
-    //features
-    void Find(int x);
-    void Empty() {cout << ((root == nullptr) ? 1 : 0) << "\n";}
-    void Size() const;
-    void Height() const;
-    void Ancestor(int x);
-    void Average(int x);
-    Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth);
-    void Insert(int x);
-    Node* EraseNode(Node* node, int x);
-    void Erase(int x);
-    void Rank(int x);
-    int CalculateRank(Node* node, int x);
+  // Insertion Operations
+  Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth);
+  void Insert(int x);
 
-    //트리 확인 함수
-    void PrintTreeRecursive(Node* node, string prefix, bool isLeft) const;
-    void PrintTree() const;
+  // Deletion Operations
+  Node* EraseNode(Node* node, int x);
+  void Erase(int x);
+
+  // Ranking Operations
+  void Rank(int x);
+  int CalculateRank(Node* node, int x);
+
+  // Tree Visualization/Debugging
+  void PrintTreeRecursive(Node* node, string prefix, bool is_left) const;
+  void PrintTree() const;
 private:
-    Node* root;  //루트 노드를 가리키는 포인터
+  Node* root_;
+  AvlTree(const AvlTree&) = delete; 
+  AvlTree& operator=(const AvlTree&) = delete;
 };
 
 class AvlTreeUtils {
 public:
-    static AvlTree::Node* NodeFindByValue(AvlTree::Node* node, int value); //특정 노드를 값에 의해 찾고 반환해주는 함수
-    static int GetPathToRootSum(AvlTree::Node*); //부모 노드로 거슬러 올라가며 key값 더하는 함수 (Ancestor에서 쓰임)
-    static AvlTree::Node* FindSuccessor(AvlTree::Node* node); //후임자 찾는 함수 (Erase에서 쓰임)
+  // Search Operations
+  static AvlTree::Node* FindNodeByValue(AvlTree::Node* node, int value);
+  static AvlTree::Node* FindSuccessor(AvlTree::Node* node);
+
+  // Path Calculations
+  static int GetPathToRootSum(AvlTree::Node* node);
 };
 
 class AvlTreeMetrics {
 public:
-    static int CalculateDepth(AvlTree::Node* node); //Depth 계산 함수
-    static void UpdateSize(AvlTree::Node* node); //노드의 멤버 변수인 size 업데이트 함수
-    static int GetSize(AvlTree::Node* node); //노드의 size 반환
-    static void UpdateHeight(AvlTree::Node* node); //노드의 멤버 변수인 height 업데이트
-    static int GetHeight(AvlTree::Node* node); //노드의 height 반환
+   // Tree Size Operations
+   static void UpdateSize(AvlTree::Node* node);
+   static int GetSize(AvlTree::Node* node);
+
+   // Height and Depth Operations
+   static int CalculateDepth(AvlTree::Node* node);
+   static void UpdateHeight(AvlTree::Node* node);
+   static int GetHeight(AvlTree::Node* node);
 };
 
 class AvlTreeRotate {
 public:
-    static int CalculateBalanceFactor(AvlTree::Node* node); //특정 노드의 균형인수 계산
-    static AvlTree::Node* FindUnbalancedNode(AvlTree::Node* node); // 특정 노드를 기준으로 부모 노드를 거슬러 올라가면서 불균형인 노드를 찾는 함수
-    static AvlTree::Node* RightRotate(AvlTree::Node* node); //불균형인 노드를 right rotate 해주는 함수
-    static AvlTree::Node* LeftRotate(AvlTree::Node* node); //불균형인 노드를 left rotate 해주는 함수
+   // Balance Analysis
+   static int CalculateBalanceFactor(AvlTree::Node* node);
+   static AvlTree::Node* FindUnbalancedNode(AvlTree::Node* node);
+
+   // Rotation Operations
+   static AvlTree::Node* RightRotate(AvlTree::Node* node);
+   static AvlTree::Node* LeftRotate(AvlTree::Node* node);
 };
 
 void AvlTree::PrintTree() const{
     cout << "\n=== Tree Visualization ===\n";
-    if (root == nullptr) {
+    if (root_ == nullptr) {
         cout << "Empty tree\n";
         return;
     }
-    PrintTreeRecursive(root, "", true);
+    PrintTreeRecursive(root_, "", true);
     cout << "=======================\n";
 }
 void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool isLeft) const{
@@ -86,15 +131,16 @@ void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool isLeft) const{
     cout << prefix;
     cout << (isLeft ? "--- " : "+-- ");
 
-    // 노드의 값과 높이 출력
+    // Print the value and height of the node
     cout << node->data << " (h:" << node -> height << ")" << " (s:" << node->size << ")" << " (d:" << AvlTreeMetrics::CalculateDepth(node) << ")" << "\n";
 
-    // 자식 노드 출력을 위한 새로운 prefix 생성
+    // Create a new prefix for printing child nodes
     string newPrefix = prefix + (isLeft ? "|   " : "    ");
 
-    // 왼쪽 자식을 먼저 출력한 후 오른쪽 자식 출력
+    // Print the left child first, then the right child
     PrintTreeRecursive(node->left, newPrefix, true);
     PrintTreeRecursive(node->right, newPrefix, false);
 }
+
 
 #endif
