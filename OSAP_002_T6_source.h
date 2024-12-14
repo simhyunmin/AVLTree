@@ -142,5 +142,5 @@ void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool isLeft) const{
     PrintTreeRecursive(node->right, newPrefix, false);
 }
 
-#endif
 
+#endif

@@ -24,7 +24,6 @@ SOFTWARE.
 Author: INHA_OSAP_002_T6
 Date: 2024-11-20
 */
-
 #include <iostream>
 #include <algorithm>
 #include <string>
@@ -43,15 +42,15 @@ public:
     Node* left;
     Node* right;
     Node* parent;
-
-    Node(int value) : data(value), height(0), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
+//////////////change height to 1
+    Node(int value) : data(value), height(1), size(1), left(nullptr), right(nullptr), parent(nullptr) {}
   };
   // Tree Management
   void Clear(Node* node); 
 
   // Basic Tree Operations
   void Find(int x)const;
-  void Empty() {cout << ((root_ == nullptr) ? 1 : 0) << "\n";}
+  void Empty() {cout << ((root_ == nullptr) ? 1 : 0) << "\n";} //show whether the tree is empty
   void Size() const;
   void Height() const;
 
@@ -177,6 +176,20 @@ int main() {
   return 0;
 }
 
+// Returns the depth (distance from root) of the given node by counting parent links
+int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
+  int depth = 0;
+  if (node == nullptr) {
+    return 0;
+  }
+  while (node->parent != nullptr) {
+    node = node->parent;
+    ++depth;
+  }
+
+  return depth;
+}
+
 // Calculates sum of node values from current node to root by following parent links
 int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
   int key_sum = 0;
@@ -215,28 +228,14 @@ AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node, int find_data)
   return node;
 }
 
-// Returns the depth (distance from root) of the given node by counting parent links
-int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
-  int depth = 0;
-  if (node == nullptr) {
-    return 0;
-  }
-  while (node->parent != nullptr) {
-    node = node->parent;
-    ++depth;
-  }
-
-  return depth;
-}
-
 // Updates node's height as max height between left and right child plus 1
 void AvlTreeMetrics::UpdateHeight(AvlTree::Node* node) {
   if (node == nullptr) {
     return;
   }
   node->height = 1 + std::max(
-    node->left ? GetHeight(node->left) : -1,
-    node->right ? GetHeight(node->right) : -1
+    node->left ? GetHeight(node->left) : 0,//////////// change basic case to 0
+    node->right ? GetHeight(node->right) : 0
   );
 }
 
@@ -251,7 +250,7 @@ void AvlTreeMetrics::UpdateSize(AvlTree::Node* node) {
 // Returns node's height, -1 for null node
 int AvlTreeMetrics::GetHeight(AvlTree::Node* node) {
   if (node == nullptr) {
-    return -1;
+    return 0; ////////////////change base case to 0
   }
   return node->height;
 }
@@ -287,9 +286,9 @@ int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node* node) {
   if (node == nullptr) {
     return 0;
   }
-  
-  int left_height = (node->left) ? node->left->height : -1;
-  int right_height = (node->right) ? node->right->height : -1;
+  //make base to 0
+  int left_height = (node->left) ? node->left->height : 0;
+  int right_height = (node->right) ? node->right->height : 0;
   return left_height - right_height;
 }
 
@@ -398,7 +397,10 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data,
                                 int& depth_height_sum, int depth) {
   if (!node) {
     depth_height_sum = depth + 1;
-    return new Node(insert_data);
+    Node* newNode = new Node(insert_data);//////////////////////////////////////////////
+    AvlTreeMetrics::UpdateHeight(newNode);
+    AvlTreeMetrics::UpdateSize(newNode);////////////////the case root come in as parameter don't update height properly so add this 
+    return newNode;
   }
 
   // Find insertion position using binary search
@@ -569,20 +571,20 @@ void AvlTree::Ancestor(int target_value) {
 }
 
 // Prints average of min and max values in subtree rooted at target value
-void AvlTree::Average(int target_value) {
-  Node* sub_tree_root = AvlTreeUtils::FindNodeByValue(root_, target_value);
+void AvlTree::Average(int target_value) { //Get average of mininum and maximum of the tree
+  Node* sub_tree_root = AvlTreeUtils::FindNodeByValue(root_, target_value); //find targe
   
   Node* min_node = sub_tree_root;
-  while (min_node->left != nullptr) {
+  while (min_node->left != nullptr) {//find minimun
     min_node = min_node->left;
   }
 
   Node* max_node = sub_tree_root;
-  while (max_node->right != nullptr) {
+  while (max_node->right != nullptr) {//find maximum
     max_node = max_node->right;
   }
   
-  int average = (min_node->data + max_node->data) / 2;
+  int average = (min_node->data + max_node->data) / 2; //Calculate average
   cout << average << "\n";
 }
 
@@ -599,33 +601,33 @@ void AvlTree::Height() const {
 // Prints sum of node's depth and height, and its rank (or 0 if node not found)
 void AvlTree::Rank(int target_value) {
   Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
-  if (target_node == nullptr) {
+  if (target_node == nullptr) {//When target_value not exist
     cout << 0 << "\n";
     return;
   }
 
-  int depth_plus_height = AvlTreeMetrics::CalculateDepth(target_node) + 
+  int depth_plus_height = AvlTreeMetrics::CalculateDepth(target_node) + //Calculate depth + height 
                          target_node->height;
-  int rank_value = CalculateRank(root_, target_value);
+  int rank_value = CalculateRank(root_, target_value); //Calculate Rank
   
   cout << depth_plus_height << " " << rank_value << "\n";
 }
 
 // Calculate rank using binary search traversal
 int AvlTree::CalculateRank(Node* current_node, int target_value) {
-  if (current_node == nullptr) {
+  if (current_node == nullptr) {//base case: assume size of nullptr for make rank of minimum value of 1
     return 0;
   }
 
-  if (target_value < current_node->data) {
+  if (target_value < current_node->data) {  //move till find the smaller one than target value
     return CalculateRank(current_node->left, target_value);
   }
-  else if (target_value > current_node->data) {
+  else if (target_value > current_node->data) { //add the size of subtree that data is low for target value
     return AvlTreeMetrics::GetSize(current_node->left) + 1 + 
             CalculateRank(current_node->right, target_value);
   }
   else {
-    return AvlTreeMetrics::GetSize(current_node->left) + 1;
+    return AvlTreeMetrics::GetSize(current_node->left) + 1; //add the size of subtree of left
   }
 }
 
@@ -652,4 +654,3 @@ void AvlTree::PrintTreeRecursive(Node* node, string prefix, bool is_left) const 
   PrintTreeRecursive(node->left, new_prefix, true);
   PrintTreeRecursive(node->right, new_prefix, false);
 }
-
