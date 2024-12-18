@@ -1,9 +1,11 @@
-#include "../AvlTree/OSAP_002_T6_source.h"
 #include <gtest/gtest.h>
+
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
+
+#include "../AvlTree/OSAP_002_T6_source.h"
 
 TEST(AvlTreeTest, TotalTest) {
   AvlTree tree_;

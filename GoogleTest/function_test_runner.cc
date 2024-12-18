@@ -1,12 +1,14 @@
-#include "../AvlTree/OSAP_002_T6_source.h"
 #include <gtest/gtest.h>
+
 #include <iostream>
-#include <stdexcept>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 
-class AvlTreeTestFixture : public testing::Test{
-  public:
+#include "../AvlTree/OSAP_002_T6_source.h"
+
+class AvlTreeTestFixture : public testing::Test {
+ public:
   AvlTreeTestFixture();
   virtual ~AvlTreeTestFixture();
   void SetUp() override;
@@ -14,12 +16,12 @@ class AvlTreeTestFixture : public testing::Test{
   static void SetUpTestCase();
   static void TearDownTestCase();
 
-  protected:
-    AvlTree tree_;
-    AvlTree emptyTree_;
+ protected:
+  AvlTree tree_;
+  AvlTree emptyTree_;
 
-    std::ostringstream total_output_, output_unexceptable_;
-    std::streambuf* original_buffer_;
+  std::ostringstream total_output_, output_unexceptable_;
+  std::streambuf* original_buffer_;
 };
 
 AvlTreeTestFixture::AvlTreeTestFixture() {
@@ -41,115 +43,109 @@ void AvlTreeTestFixture::TearDownTestCase() {
 void AvlTreeTestFixture::SetUp() {
   original_buffer_ = std::cout.rdbuf();
   std::cout.rdbuf(output_unexceptable_.rdbuf());
-  for(int i = 1; i < 8; i++)
-    tree_.Insert(i);
+  for (int i = 1; i < 8; i++) tree_.Insert(i);
 
   original_buffer_ = std::cout.rdbuf();
   std::cout.rdbuf(total_output_.rdbuf());
 }
 
-void AvlTreeTestFixture::TearDown() {
-  std::cout.rdbuf(original_buffer_);
-}
+void AvlTreeTestFixture::TearDown() { std::cout.rdbuf(original_buffer_); }
 
-//Test Find
-TEST_F(AvlTreeTestFixture, TestFind) { //** */
-  for(int i = 1; i < 8; i++)
-    tree_.Find(i);
+// Test Find
+TEST_F(AvlTreeTestFixture, TestFind) {  //** */
+  for (int i = 1; i < 8; i++) tree_.Find(i);
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("3\n3\n3\n3\n3\n3\n3\n",saved_output);
+  ASSERT_EQ("3\n3\n3\n3\n3\n3\n3\n", saved_output);
 }
 
-//Test Empty
-TEST_F(AvlTreeTestFixture, TestEmpty) {//*
+// Test Empty
+TEST_F(AvlTreeTestFixture, TestEmpty) {  //*
   tree_.Empty();
   emptyTree_.Empty();
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("0\n1\n",saved_output);
+  ASSERT_EQ("0\n1\n", saved_output);
 }
 
-
-//Test Size
-TEST_F(AvlTreeTestFixture, TestSize) {//*
+// Test Size
+TEST_F(AvlTreeTestFixture, TestSize) {  //*
   tree_.Size();
   emptyTree_.Size();
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("7\n0\n",saved_output);
+  ASSERT_EQ("7\n0\n", saved_output);
 }
 
-//Test Height
-TEST_F(AvlTreeTestFixture, TestHeight) {//*
+// Test Height
+TEST_F(AvlTreeTestFixture, TestHeight) {  //*
   tree_.Height();
   emptyTree_.Height();
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("3\n-1\n",saved_output);
+  ASSERT_EQ("3\n-1\n", saved_output);
 }
 
-//Test Ancestor
-TEST_F(AvlTreeTestFixture, TestAncestor) {//*
+// Test Ancestor
+TEST_F(AvlTreeTestFixture, TestAncestor) {  //*
   tree_.Ancestor(4);
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("3 0\n",saved_output);
+  ASSERT_EQ("3 0\n", saved_output);
 }
 
-//Test Average
-TEST_F(AvlTreeTestFixture, TestAverage) {//*
+// Test Average
+TEST_F(AvlTreeTestFixture, TestAverage) {  //*
   tree_.Average(4);
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("4\n",saved_output);
+  ASSERT_EQ("4\n", saved_output);
 }
 
-//Test Rank Operations
-TEST_F(AvlTreeTestFixture, TestRank) {//*
+// Test Rank Operations
+TEST_F(AvlTreeTestFixture, TestRank) {  //*
   tree_.Rank(1);
   tree_.Rank(8);
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("3 1\n0\n",saved_output);
+  ASSERT_EQ("3 1\n0\n", saved_output);
 }
-TEST_F(AvlTreeTestFixture, TestCalculateRank) { //*
-  ASSERT_EQ(3,tree_.CalculateRank(tree_.getRoot(),3));
+TEST_F(AvlTreeTestFixture, TestCalculateRank) {  //*
+  ASSERT_EQ(3, tree_.CalculateRank(tree_.getRoot(), 3));
 }
 
-//Test Path Calculations
-TEST_F(AvlTreeTestFixture, TestGetPathToRootSum) {//*
+// Test Path Calculations
+TEST_F(AvlTreeTestFixture, TestGetPathToRootSum) {  //*
   EXPECT_EQ(7, AvlTreeUtils::GetPathToRootSum(
-    AvlTreeUtils::FindNodeByValue(tree_.getRoot(),1)));
+                   AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 1)));
 }
 
-
-TEST_F(AvlTreeTestFixture, TestGetSize) {//*
+TEST_F(AvlTreeTestFixture, TestGetSize) {  //*
   EXPECT_EQ(7, AvlTreeMetrics::GetSize(
-    AvlTreeUtils::FindNodeByValue(tree_.getRoot(),4)));
+                   AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 4)));
 
   EXPECT_EQ(0, AvlTreeMetrics::GetSize(
-    AvlTreeUtils::FindNodeByValue(emptyTree_.getRoot(),4)));
+                   AvlTreeUtils::FindNodeByValue(emptyTree_.getRoot(), 4)));
 }
 
-//Test Height and Depth Operations
-TEST_F(AvlTreeTestFixture, TestCalculateDepth) {//*
-  EXPECT_EQ(0,AvlTreeMetrics::CalculateDepth(
-    AvlTreeUtils::FindNodeByValue(tree_.getRoot(),4)));
+// Test Height and Depth Operations
+TEST_F(AvlTreeTestFixture, TestCalculateDepth) {  //*
+  EXPECT_EQ(0, AvlTreeMetrics::CalculateDepth(
+                   AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 4)));
 
-  EXPECT_EQ(0,AvlTreeMetrics::CalculateDepth(nullptr));
+  EXPECT_EQ(0, AvlTreeMetrics::CalculateDepth(nullptr));
 }
 
-TEST_F(AvlTreeTestFixture, TestGetHeight) {//*
-  EXPECT_EQ(3,AvlTreeMetrics::GetHeight(
-    AvlTreeUtils::FindNodeByValue(tree_.getRoot(),4)));
-  
-  EXPECT_EQ(0,AvlTreeMetrics::GetHeight(nullptr));
+TEST_F(AvlTreeTestFixture, TestGetHeight) {  //*
+  EXPECT_EQ(3, AvlTreeMetrics::GetHeight(
+                   AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 4)));
+
+  EXPECT_EQ(0, AvlTreeMetrics::GetHeight(nullptr));
 }
 
-//Test Balance Analysis
-TEST_F(AvlTreeTestFixture, TestCalculateBalanceFactor) {//*
+// Test Balance Analysis
+TEST_F(AvlTreeTestFixture, TestCalculateBalanceFactor) {  //*
   EXPECT_EQ(0, AvlTreeRotate::CalculateBalanceFactor(
-    AvlTreeUtils::FindNodeByValue(tree_.getRoot(),1)));
+                   AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 1)));
   EXPECT_EQ(0, AvlTreeRotate::CalculateBalanceFactor(nullptr));
 }
 
-//Test Insert
+// Test Insert
 TEST_F(AvlTreeTestFixture, TestInsert) {
-  //이미 있는 값을 줬을때
+  // 이미 있는 값을 줬을때
   tree_.Insert(1);
   AvlTree treeForTestInsertLL;
   treeForTestInsertLL.Insert(5);
@@ -180,10 +176,13 @@ TEST_F(AvlTreeTestFixture, TestInsert) {
   treeForTestInsertRL.Insert(4);
   treeForTestInsertRL.Insert(3);
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("1\n2\n2\n3\n3\n3\n1\n2\n2\n3\n3\n3\n1\n2\n2\n3\n3\n3\n1\n2\n2\n3\n3\n3\n",saved_output);
+  ASSERT_EQ(
+      "1\n2\n2\n3\n3\n3\n1\n2\n2\n3\n3\n3\n1\n2\n2\n3\n3\n3\n1\n2\n2\n3\n3\n3"
+      "\n",
+      saved_output);
 }
 
-//Test Erase
+// Test Erase
 TEST_F(AvlTreeTestFixture, TestErase) {
   0, tree_.Erase(1000);
   AvlTree treeForTestEraseLL;
@@ -223,10 +222,13 @@ TEST_F(AvlTreeTestFixture, TestErase) {
   treeForTestEraseRL.Insert(4);
   treeForTestEraseRL.Erase(1);
   std::string saved_output = total_output_.str();
-  ASSERT_EQ("0\n1\n2\n2\n3\n3\n3\n4\n3\n1\n2\n2\n3\n3\n3\n4\n3\n1\n2\n2\n3\n3\n3\n4\n3\n1\n2\n2\n3\n3\n3\n4\n3\n",saved_output);
+  ASSERT_EQ(
+      "0\n1\n2\n2\n3\n3\n3\n4\n3\n1\n2\n2\n3\n3\n3\n4\n3\n1\n2\n2\n3\n3\n3\n4\n"
+      "3\n1\n2\n2\n3\n3\n3\n4\n3\n",
+      saved_output);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

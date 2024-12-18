@@ -35,8 +35,8 @@ Date: 2024-11-20
 using namespace std;
 
 class AvlTree {
-public:
-  AvlTree() : root_(nullptr){};
+ public:
+  AvlTree() : root_(nullptr) {};
   ~AvlTree() { Clear(root_); };
 
   struct Node {
@@ -48,7 +48,11 @@ public:
     Node *parent;
     //////////////change height to 1
     Node(int value)
-        : data(value), height(1), size(1), left(nullptr), right(nullptr),
+        : data(value),
+          height(1),
+          size(1),
+          left(nullptr),
+          right(nullptr),
           parent(nullptr) {}
   };
   // Tree Management
@@ -58,7 +62,7 @@ public:
   void Find(int x) const;
   void Empty() {
     cout << ((root_ == nullptr) ? 1 : 0) << "\n";
-  } // show whether the tree is empty
+  }  // show whether the tree is empty
   void Size() const;
   void Height() const;
 
@@ -81,8 +85,9 @@ public:
   // Tree Visualization/Debugging
   void PrintTreeRecursive(Node *node, string prefix, bool is_left) const;
   void PrintTree() const;
-  Node* getRoot(){return root_;}
-private:
+  Node *getRoot() { return root_; }
+
+ private:
   Node *root_;
   AvlTree(const AvlTree &) = delete;
   AvlTree &operator=(const AvlTree &) = delete;
@@ -92,7 +97,7 @@ private:
  * @brief Utility class for AVL tree operations
  */
 class AvlTreeUtils {
-public:
+ public:
   static AvlTree::Node *FindNodeByValue(AvlTree::Node *node, int value);
   static AvlTree::Node *FindSuccessor(AvlTree::Node *node);
 
@@ -103,7 +108,7 @@ public:
  * @brief Metrics calculation class for AVL tree
  */
 class AvlTreeMetrics {
-public:
+ public:
   static void UpdateSize(AvlTree::Node *node);
   static int GetSize(AvlTree::Node *node);
 
@@ -116,7 +121,7 @@ public:
  * @brief Rotation and balance operations class for AVL tree
  */
 class AvlTreeRotate {
-public:
+ public:
   static int CalculateBalanceFactor(AvlTree::Node *node);
   static AvlTree::Node *FindUnbalancedNode(AvlTree::Node *node);
 
