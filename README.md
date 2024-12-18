@@ -1,8 +1,5 @@
 # AVL Tree Project
-This project implements an AVL Tree in C++ to perform range queries efficiently. 
-The AVL tree is a self-balancing binary search tree (BST), where 
-the difference between heights of left and right subtrees cannot be more than one for all nodes. 
-The tree supports insertion, deletion, and querying of elements within a given range.
+This project implements an AVL tree in C++ to efficiently perform rotations during each insertion and deletion. An AVL tree is a self-balancing binary search tree (BST) where the height difference between the left and right subtrees of any node cannot exceed 1. Additionally, it supports both basic and advanced functionalities.
 
 ## Table of Contents
 - [Features](#features)
@@ -15,10 +12,13 @@ The tree supports insertion, deletion, and querying of elements within a given r
 
 
 ## Project Summary
-This project aims to implement range query functionality based on an AVL tree. The AVL tree is characterized by its self-balancing property, ensuring that insertion, deletion, and search operations have a time complexity of O(log(n)). The project provides the following key functionalities:
+This project provides basic and advanced functionalities based on an AVL tree. The AVL tree is an efficient tree structure that, due to its self-balancing property, has a time complexity of O(log(n)) for insertion, deletion, and search operations. 
+
+This project offers the following key features:
 
 ## Features
 
+### Basic Features:
 - **Find x**: Outputs the sum of the depth and height of node x (1 ≤ x ≤ 300,000). If node x does not exist, it outputs 0.
 - **Insert x**: Inserts a new node x and outputs the sum of the depth and height of node x. The value x is guaranteed to be unique in the current set.
 - **Empty**: Outputs 1 if the set is empty, otherwise outputs 0.
@@ -27,7 +27,7 @@ This project aims to implement range query functionality based on an AVL tree. T
 - **Ancestor x**: Outputs the sum of the depth and height of node x, along with the sum of the key values from x's parent to the root.
 - If x is the root, it outputs 'K 0' (where K is the sum of depth and height).
 - **Average x**: Outputs the arithmetic mean of the minimum (a) and maximum (b) key values in the subtree rooted at node x.
--
+### Advanced Features:
 - **Rank x**: Outputs the sum of the depth and height of node x, along with its rank. If node x does not exist,
 - it outputs 0. The rank is defined as the number of elements in the set that are less than x, plus one.
 - **Erase x**: Outputs the sum of the depth and height of node x and deletes the node. If node x does not exist, it outputs 0. If x has two children, it uses the successor to perform the deletion.
