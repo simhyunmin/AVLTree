@@ -35,7 +35,7 @@ using namespace std;
  */
 class AvlTree {
  public:
-  AvlTree() : root_(nullptr){};
+  AvlTree() : root_(nullptr) {};
   ~AvlTree() { Clear(root_); };
 
   /**
@@ -178,24 +178,6 @@ int main() {
 }
 
 /**
- * @brief Calculate depth of node by counting parent links
- * @param node Target node for depth calculation
- * @return Depth value, 0 if node is nullptr
- */
-int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
-  int depth = 0;
-  if (node == nullptr) {
-    return 0;
-  }
-  while (node->parent != nullptr) {
-    node = node->parent;
-    ++depth;
-  }
-
-  return depth;
-}
-
-/**
  * @brief Calculate sum of node values from current node to root
  * @param node Starting node for path calculation
  * @return Sum of values in path to root
@@ -248,6 +230,24 @@ AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node,
 }
 
 /**
+ * @brief Calculate depth of node by counting parent links
+ * @param node Target node for depth calculation
+ * @return Depth value, 0 if node is nullptr
+ */
+int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
+  int depth = 0;
+  if (node == nullptr) {
+    return 0;
+  }
+  while (node->parent != nullptr) {
+    node = node->parent;
+    ++depth;
+  }
+
+  return depth;
+}
+
+/**
  * @brief Update node height
  * @param node Node to update height
  */
@@ -294,29 +294,6 @@ int AvlTreeMetrics::GetSize(AvlTree::Node* node) {
     return 0;
   }
   return node->size;
-}
-
-/**
- * @brief Print total number of nodes in tree
- */
-void AvlTree::Size() const {
-  if (root_ == nullptr) {
-    cout << 0 << "\n";
-    return;
-  }
-  cout << root_->size << "\n";
-}
-
-/**
- * @brief Delete all nodes in tree using post-order traversal
- * @param node Starting node for deletion
- */
-void AvlTree::Clear(AvlTree::Node* node) {
-  if (node != nullptr) {
-    Clear(node->left);
-    Clear(node->right);
-    delete node;
-  }
 }
 
 /**
@@ -440,6 +417,29 @@ AvlTree::Node* AvlTreeRotate::LeftRotate(AvlTree::Node* parent_node) {
   AvlTreeMetrics::UpdateSize(child);
 
   return child;
+}
+
+/**
+ * @brief Print total number of nodes in tree
+ */
+void AvlTree::Size() const {
+  if (root_ == nullptr) {
+    cout << 0 << "\n";
+    return;
+  }
+  cout << root_->size << "\n";
+}
+
+/**
+ * @brief Delete all nodes in tree using post-order traversal
+ * @param node Starting node for deletion
+ */
+void AvlTree::Clear(AvlTree::Node* node) {
+  if (node != nullptr) {
+    Clear(node->left);
+    Clear(node->right);
+    delete node;
+  }
 }
 
 /**
