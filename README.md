@@ -31,8 +31,7 @@ This project aims to implement range query functionality based on an AVL tree. T
 -
 - **Rank x**: Outputs the sum of the depth and height of node x, along with its rank. If node x does not exist,
 - it outputs 0. The rank is defined as the number of elements in the set that are less than x, plus one.
-- **Erase x**: Outputs the sum of the depth and height of node x and deletes the node. If node x does not exist,
-- it outputs 0. If x has two children, it uses the successor to perform the deletion.
+- **Erase x**: Outputs the sum of the depth and height of node x and deletes the node. If node x does not exist, it outputs 0. If x has two children, it uses the successor to perform the deletion.
 
 ## Prerequisites
 To run this project
@@ -45,27 +44,21 @@ To run this project
 
 ## Installation
 
-Clone the repository:
-
-bash
-
+1. Clone the repository:
 ```bash
-git clone https://github.com/prxxchi/AVLTreeRangeQuery.git
-Navigate to the project directory:
+git clone https://github.com/simhyunmin/INHA_OSAP_002_T6.git
 ```
 
-bash
-
-
+2. you will use 'cd' and go the project directory:
+```bash
 cd avl-tree-range-query
-Compile the code:
+```
 
-bash
-
-
+3. Compile the code:
+```bash
 g++ -o avl_tree main.cpp avl_tree.cpp
 Run the executable:
-
+```
 bash
 
 
