@@ -252,7 +252,7 @@ void AvlTree::Average(int x) {
 
 void AvlTree::Height() const {
     if (root == nullptr) {
-        cout << -1 << "\n";
+        cout << 0 << "\n";
     }
     else {
         cout << root->height << "\n";
