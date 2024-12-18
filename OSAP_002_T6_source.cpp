@@ -30,11 +30,17 @@ Date: 2024-11-20
 #include <vector>
 using namespace std;
 
+/**
+ * @brief Implementation class for AVL tree
+ */
 class AvlTree {
  public:
-  AvlTree() : root_(nullptr){};
+  AvlTree() : root_(nullptr) {};
   ~AvlTree() { Clear(root_); };
 
+  /**
+   * @brief Node for AVL tree
+   */
   struct Node {
     int data;
     int height;
@@ -42,7 +48,7 @@ class AvlTree {
     Node* left;
     Node* right;
     Node* parent;
-    //////////////change height to 1
+
     Node(int value)
         : data(value),
           height(1),
@@ -51,34 +57,23 @@ class AvlTree {
           right(nullptr),
           parent(nullptr) {}
   };
-  // Tree Management
   void Clear(Node* node);
-
-  // Basic Tree Operations
   void Find(int x) const;
-  void Empty() {
-    cout << ((root_ == nullptr) ? 1 : 0) << "\n";
-  }  // show whether the tree is empty
+  void Empty() { cout << ((root_ == nullptr) ? 1 : 0) << "\n"; }
   void Size() const;
   void Height() const;
-
-  // Traversal and Statistics
   void Ancestor(int x);
   void Average(int x);
 
-  // Insertion Operations
   Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth);
   void Insert(int x);
 
-  // Deletion Operations
   Node* EraseNode(Node* node, int x);
   void Erase(int x);
 
-  // Ranking Operations
   void Rank(int x);
   int CalculateRank(Node* node, int x);
 
-  // Tree Visualization/Debugging
   void PrintTreeRecursive(Node* node, string prefix, bool is_left) const;
   void PrintTree() const;
 
@@ -88,39 +83,45 @@ class AvlTree {
   AvlTree& operator=(const AvlTree&) = delete;
 };
 
+/**
+ * @brief Utility class for AVL tree operations
+ */
 class AvlTreeUtils {
  public:
-  // Search Operations
   static AvlTree::Node* FindNodeByValue(AvlTree::Node* node, int value);
   static AvlTree::Node* FindSuccessor(AvlTree::Node* node);
 
-  // Path Calculations
   static int GetPathToRootSum(AvlTree::Node* node);
 };
 
+/**
+ * @brief Metrics calculation class for AVL tree
+ */
 class AvlTreeMetrics {
  public:
-  // Tree Size Operations
   static void UpdateSize(AvlTree::Node* node);
   static int GetSize(AvlTree::Node* node);
 
-  // Height and Depth Operations
   static int CalculateDepth(AvlTree::Node* node);
   static void UpdateHeight(AvlTree::Node* node);
   static int GetHeight(AvlTree::Node* node);
 };
 
+/**
+ * @brief Rotation and balance operations class for AVL tree
+ */
 class AvlTreeRotate {
  public:
-  // Balance Analysis
   static int CalculateBalanceFactor(AvlTree::Node* node);
   static AvlTree::Node* FindUnbalancedNode(AvlTree::Node* node);
 
-  // Rotation Operations
   static AvlTree::Node* RightRotate(AvlTree::Node* node);
   static AvlTree::Node* LeftRotate(AvlTree::Node* node);
 };
 
+/**
+ * @brief Main function handling test cases and queries
+ */
 int main() {
   ios_base::sync_with_stdio(false);
   cin.tie(nullptr);
@@ -176,23 +177,11 @@ int main() {
   return 0;
 }
 
-// Returns the depth (distance from root) of the given node by counting parent
-// links
-int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
-  int depth = 0;
-  if (node == nullptr) {
-    return 0;
-  }
-  while (node->parent != nullptr) {
-    node = node->parent;
-    ++depth;
-  }
-
-  return depth;
-}
-
-// Calculates sum of node values from current node to root by following parent
-// links
+/**
+ * @brief Calculate sum of node values from current node to root
+ * @param node Starting node for path calculation
+ * @return Sum of values in path to root
+ */
 int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
   int key_sum = 0;
 
@@ -204,7 +193,11 @@ int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
   return key_sum;
 }
 
-// Finds leftmost node in the subtree (smallest value successor) of given node
+/**
+ * @brief Find successor node (smallest value in right subtree)
+ * @param node Starting node to find successor
+ * @return Pointer to successor node, nullptr if not found
+ */
 AvlTree::Node* AvlTreeUtils::FindSuccessor(AvlTree::Node* node) {
   if (node == nullptr) {
     return node;
@@ -216,7 +209,12 @@ AvlTree::Node* AvlTreeUtils::FindSuccessor(AvlTree::Node* node) {
   return temp;
 }
 
-// Traverses tree to find node with given value using binary search
+/**
+ * @brief Find node with specific value using binary search
+ * @param node Root node to start search
+ * @param find_data Value to find
+ * @return Pointer to found node, nullptr if not found
+ */
 AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node,
                                              int find_data) {
   while (node != nullptr) {
@@ -231,7 +229,28 @@ AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node,
   return node;
 }
 
-// Updates node's height as max height between left and right child plus 1
+/**
+ * @brief Calculate depth of node by counting parent links
+ * @param node Target node for depth calculation
+ * @return Depth value, 0 if node is nullptr
+ */
+int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
+  int depth = 0;
+  if (node == nullptr) {
+    return 0;
+  }
+  while (node->parent != nullptr) {
+    node = node->parent;
+    ++depth;
+  }
+
+  return depth;
+}
+
+/**
+ * @brief Update node height
+ * @param node Node to update height
+ */
 void AvlTreeMetrics::UpdateHeight(AvlTree::Node* node) {
   if (node == nullptr) {
     return;
@@ -242,7 +261,10 @@ void AvlTreeMetrics::UpdateHeight(AvlTree::Node* node) {
                    node->right ? GetHeight(node->right) : 0);
 }
 
-// Updates node's size as sum of left and right subtree sizes plus 1
+/**
+ * @brief Update node size
+ * @param node Node to update size
+ */
 void AvlTreeMetrics::UpdateSize(AvlTree::Node* node) {
   if (node == nullptr) {
     return;
@@ -250,15 +272,23 @@ void AvlTreeMetrics::UpdateSize(AvlTree::Node* node) {
   node->size = 1 + GetSize(node->left) + GetSize(node->right);
 }
 
-// Returns node's height, -1 for null node
+/**
+ * @brief Get height of node
+ * @param node Target node
+ * @return Height value, 0 for null node
+ */
 int AvlTreeMetrics::GetHeight(AvlTree::Node* node) {
   if (node == nullptr) {
-    return 0;  ////////////////change base case to 0
+    return 0;
   }
   return node->height;
 }
 
-// Returns node's size, 0 for null node
+/**
+ * @brief Get size of node's subtree
+ * @param node Root of subtree
+ * @return Size value, 0 for null node
+ */
 int AvlTreeMetrics::GetSize(AvlTree::Node* node) {
   if (node == nullptr) {
     return 0;
@@ -266,25 +296,11 @@ int AvlTreeMetrics::GetSize(AvlTree::Node* node) {
   return node->size;
 }
 
-// Print total number of nodes in tree
-void AvlTree::Size() const {
-  if (root_ == nullptr) {
-    cout << 0 << "\n";
-    return;
-  }
-  cout << root_->size << "\n";
-}
-
-// Post-order traversal to delete all nodes in the tree
-void AvlTree::Clear(AvlTree::Node* node) {
-  if (node != nullptr) {
-    Clear(node->left);
-    Clear(node->right);
-    delete node;
-  }
-}
-
-// Returns balance factor (left height - right height) of node
+/**
+ * @brief Calculate balance factor of node
+ * @param node Target node
+ * @return Balance factor (left height - right height)
+ */
 int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node* node) {
   if (node == nullptr) {
     return 0;
@@ -295,7 +311,11 @@ int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node* node) {
   return left_height - right_height;
 }
 
-// Finds ancestor node that violates AVL balance property
+/**
+ * @brief Find ancestor node that violates AVL balance property
+ * @param node Starting node
+ * @return Pointer to unbalanced node, nullptr if not found
+ */
 AvlTree::Node* AvlTreeRotate::FindUnbalancedNode(AvlTree::Node* node) {
   if (node == nullptr) {
     return nullptr;
@@ -309,8 +329,11 @@ AvlTree::Node* AvlTreeRotate::FindUnbalancedNode(AvlTree::Node* node) {
   return FindUnbalancedNode(node->parent);
 }
 
-// Performs right rotation around parent_node and updates height/size of
-// affected nodes
+/**
+ * @brief Perform right rotation around parent_node
+ * @param parent_node Rotation pivot node
+ * @return New root after rotation
+ */
 AvlTree::Node* AvlTreeRotate::RightRotate(AvlTree::Node* parent_node) {
   AvlTree::Node* child = parent_node->left;
   AvlTree::Node* child_right = child->right;
@@ -351,8 +374,11 @@ AvlTree::Node* AvlTreeRotate::RightRotate(AvlTree::Node* parent_node) {
   return child;
 }
 
-// Performs left rotation around parent_node and updates height/size of affected
-// nodes
+/**
+ * @brief Perform left rotation around parent_node
+ * @param parent_node Rotation pivot node
+ * @return New root after rotation
+ */
 AvlTree::Node* AvlTreeRotate::LeftRotate(AvlTree::Node* parent_node) {
   AvlTree::Node* child = parent_node->right;
   AvlTree::Node* child_left = child->left;
@@ -393,17 +419,44 @@ AvlTree::Node* AvlTreeRotate::LeftRotate(AvlTree::Node* parent_node) {
   return child;
 }
 
-// Binary search to insertion point and rebalance if needed
+/**
+ * @brief Print total number of nodes in tree
+ */
+void AvlTree::Size() const {
+  if (root_ == nullptr) {
+    cout << 0 << "\n";
+    return;
+  }
+  cout << root_->size << "\n";
+}
+
+/**
+ * @brief Delete all nodes in tree using post-order traversal
+ * @param node Starting node for deletion
+ */
+void AvlTree::Clear(AvlTree::Node* node) {
+  if (node != nullptr) {
+    Clear(node->left);
+    Clear(node->right);
+    delete node;
+  }
+}
+
+/**
+ * @brief Insert new node while maintaining AVL balance
+ * @param node Current node in recursion
+ * @param insert_data Value to insert
+ * @param depth_height_sum Running sum of depth and height
+ * @param depth Current depth in tree
+ * @return New root after insertion
+ */
 AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data,
                                    int& depth_height_sum, int depth) {
   if (!node) {
     depth_height_sum = depth + 1;
-    Node* newNode =
-        new Node(insert_data);  //////////////////////////////////////////////
+    Node* newNode = new Node(insert_data);
     AvlTreeMetrics::UpdateHeight(newNode);
-    AvlTreeMetrics::UpdateSize(
-        newNode);  ////////////////the case root come in as parameter don't
-                   ///update height properly so add this
+    AvlTreeMetrics::UpdateSize(newNode);
     return newNode;
   }
 
@@ -450,7 +503,10 @@ AvlTree::Node* AvlTree::InsertNode(AvlTree::Node* node, int insert_data,
   return node;
 }
 
-// Inserts value and prints sum of inserted node's height and depth
+/**
+ * @brief interface for inserting value into tree
+ * @param insert_data Value to insert
+ */
 void AvlTree::Insert(int insert_data) {
   int depth_height_sum = 0;
 
@@ -464,7 +520,12 @@ void AvlTree::Insert(int insert_data) {
        << "\n";
 }
 
-// Find target node, delete it and rebalance if needed
+/**
+ * @brief Delete node while maintaining AVL balance
+ * @param node Current node in recursion
+ * @param erase_data Value to delete
+ * @return New root after deletion and rebalancing
+ */
 AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data) {
   if (!node) {
     return nullptr;
@@ -536,7 +597,10 @@ AvlTree::Node* AvlTree::EraseNode(Node* node, int erase_data) {
   return node;
 }
 
-// Erases value and prints sum of target node's height and depth
+/**
+ * @brief interface for deleting value from tree
+ * @param value_to_erase Value to delete
+ */
 void AvlTree::Erase(int value_to_erase) {
   Node* target_node = AvlTreeUtils::FindNodeByValue(root_, value_to_erase);
   if (target_node == nullptr) {
@@ -550,7 +614,10 @@ void AvlTree::Erase(int value_to_erase) {
   root_ = EraseNode(root_, value_to_erase);
 }
 
-// Prints sum of target node's height and depth if found, 0 otherwise
+/**
+ * @brief Search for value and print height + depth sum
+ * @param target_value Value to find
+ */
 void AvlTree::Find(int target_value) const {
   Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
   int result = 0;
@@ -562,7 +629,10 @@ void AvlTree::Find(int target_value) const {
   cout << result << "\n";
 }
 
-// Prints height+depth sum and path sum to root from parent
+/**
+ * @brief Calculate and print parent path statistics
+ * @param target_value Value of target node
+ */
 void AvlTree::Ancestor(int target_value) {
   Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
   int depth = AvlTreeMetrics::CalculateDepth(target_node);
@@ -572,7 +642,10 @@ void AvlTree::Ancestor(int target_value) {
   cout << depth + height << " " << parent_path_sum << "\n";
 }
 
-// Prints average of min and max values in subtree rooted at target value
+/**
+ * @brief Print average of min and max values in subtree
+ * @param target_value Root value of target subtree
+ */
 void AvlTree::Average(
     int target_value) {  // Get average of mininum and maximum of the tree
   Node* sub_tree_root =
@@ -592,7 +665,9 @@ void AvlTree::Average(
   cout << average << "\n";
 }
 
-// Prints tree height, -1 if empty
+/**
+ * @brief Print tree height
+ */
 void AvlTree::Height() const {
   if (root_ == nullptr) {
     cout << -1 << "\n";
@@ -602,7 +677,10 @@ void AvlTree::Height() const {
   cout << root_->height << "\n";
 }
 
-// Prints sum of node's depth and height, and its rank (or 0 if node not found)
+/**
+ * @brief Print node statistics and rank
+ * @param target_value Value to find rank for
+ */
 void AvlTree::Rank(int target_value) {
   Node* target_node = AvlTreeUtils::FindNodeByValue(root_, target_value);
   if (target_node == nullptr) {  // When target_value not exist
@@ -618,7 +696,12 @@ void AvlTree::Rank(int target_value) {
   cout << depth_plus_height << " " << rank_value << "\n";
 }
 
-// Calculate rank using binary search traversal
+/**
+ * @brief Calculate rank of value in tree
+ * @param current_node Current node in recursion
+ * @param target_value Value to find rank for
+ * @return Calculated rank value
+ */
 int AvlTree::CalculateRank(Node* current_node, int target_value) {
   if (current_node == nullptr) {  // base case: assume size of nullptr for make
                                   // rank of minimum value of 1
@@ -639,6 +722,9 @@ int AvlTree::CalculateRank(Node* current_node, int target_value) {
   }
 }
 
+/**
+ * @brief Print tree visualization
+ */
 void AvlTree::PrintTree() const {
   cout << "\n=== Tree Visualization ===\n";
   if (root_ == nullptr) {
@@ -649,6 +735,12 @@ void AvlTree::PrintTree() const {
   cout << "=======================\n";
 }
 
+/**
+ * @brief Print tree structure recursively with formatting
+ * @param node Current node to print
+ * @param prefix String prefix for visual indentation
+ * @param is_left Whether current node is a left child
+ */
 void AvlTree::PrintTreeRecursive(Node* node, string prefix,
                                  bool is_left) const {
   if (node == nullptr) return;

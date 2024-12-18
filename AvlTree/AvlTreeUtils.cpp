@@ -27,20 +27,11 @@ Date: 2024-11-20
 
 #include "OSAP_002_T6_source.h"
 
-
-// Calculates sum of node values from current node to root by following parent links
-int AvlTreeUtils::GetPathToRootSum(AvlTree::Node* node) {
-  int key_sum = 0;
-
-  while (node != nullptr) {
-    key_sum += node->data;
-    node = node->parent;
-  }
-
-  return key_sum;
-}
-
-// Finds leftmost node in the subtree (smallest value successor) of given node
+/**
+ * @brief Find successor node (smallest value in right subtree)
+ * @param node Starting node to find successor
+ * @return Pointer to successor node, nullptr if not found
+ */
 AvlTree::Node* AvlTreeUtils::FindSuccessor(AvlTree::Node* node) {
   if (node == nullptr) {
     return node;
@@ -52,8 +43,14 @@ AvlTree::Node* AvlTreeUtils::FindSuccessor(AvlTree::Node* node) {
   return temp;
 }
 
-// Traverses tree to find node with given value using binary search
-AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node, int find_data) {
+/**
+ * @brief Find node with specific value using binary search
+ * @param node Root node to start search
+ * @param find_data Value to find
+ * @return Pointer to found node, nullptr if not found
+ */
+AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node,
+                                             int find_data) {
   while (node != nullptr) {
     if (node->data == find_data) {
       return node;
@@ -65,4 +62,3 @@ AvlTree::Node* AvlTreeUtils::FindNodeByValue(AvlTree::Node* node, int find_data)
   }
   return node;
 }
-
