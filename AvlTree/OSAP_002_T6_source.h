@@ -35,32 +35,30 @@ Date: 2024-11-20
 using namespace std;
 
 class AvlTree {
- public:
-  AvlTree() : root_(nullptr) {};
+public:
+  AvlTree() : root_(nullptr){};
   ~AvlTree() { Clear(root_); };
 
   struct Node {
     int data;
     int height;
     int size;
-    Node* left;
-    Node* right;
-    Node* parent;
-
+    Node *left;
+    Node *right;
+    Node *parent;
+    //////////////change height to 1
     Node(int value)
-        : data(value),
-          height(0),
-          size(1),
-          left(nullptr),
-          right(nullptr),
+        : data(value), height(1), size(1), left(nullptr), right(nullptr),
           parent(nullptr) {}
   };
   // Tree Management
-  void Clear(Node* node);
+  void Clear(Node *node);
 
   // Basic Tree Operations
   void Find(int x) const;
-  void Empty() { cout << ((root_ == nullptr) ? 1 : 0) << "\n"; }
+  void Empty() {
+    cout << ((root_ == nullptr) ? 1 : 0) << "\n";
+  } // show whether the tree is empty
   void Size() const;
   void Height() const;
 
@@ -69,98 +67,61 @@ class AvlTree {
   void Average(int x);
 
   // Insertion Operations
-  Node* InsertNode(Node* node, int x, int& depth_height_sum, int depth);
+  Node *InsertNode(Node *node, int x, int &depth_height_sum, int depth);
   void Insert(int x);
 
   // Deletion Operations
-  Node* EraseNode(Node* node, int x);
+  Node *EraseNode(Node *node, int x);
   void Erase(int x);
 
   // Ranking Operations
   void Rank(int x);
-  int CalculateRank(Node* node, int x);
+  int CalculateRank(Node *node, int x);
 
   // Tree Visualization/Debugging
-  void PrintTreeRecursive(Node* node, string prefix, bool is_left) const;
+  void PrintTreeRecursive(Node *node, string prefix, bool is_left) const;
   void PrintTree() const;
-
- private:
-  Node* root_;
-  AvlTree(const AvlTree&) = delete;
-  AvlTree& operator=(const AvlTree&) = delete;
+  Node* getRoot(){return root_;}
+private:
+  Node *root_;
+  AvlTree(const AvlTree &) = delete;
+  AvlTree &operator=(const AvlTree &) = delete;
 };
 
 /**
  * @brief Utility class for AVL tree operations
  */
 class AvlTreeUtils {
- public:
-  static AvlTree::Node* FindNodeByValue(AvlTree::Node* node, int value);
-  static AvlTree::Node* FindSuccessor(AvlTree::Node* node);
+public:
+  static AvlTree::Node *FindNodeByValue(AvlTree::Node *node, int value);
+  static AvlTree::Node *FindSuccessor(AvlTree::Node *node);
 
-  static int GetPathToRootSum(AvlTree::Node* node);
+  static int GetPathToRootSum(AvlTree::Node *node);
 };
 
 /**
  * @brief Metrics calculation class for AVL tree
  */
 class AvlTreeMetrics {
- public:
-  static void UpdateSize(AvlTree::Node* node);
-  static int GetSize(AvlTree::Node* node);
+public:
+  static void UpdateSize(AvlTree::Node *node);
+  static int GetSize(AvlTree::Node *node);
 
-  static int CalculateDepth(AvlTree::Node* node);
-  static void UpdateHeight(AvlTree::Node* node);
-  static int GetHeight(AvlTree::Node* node);
+  static int CalculateDepth(AvlTree::Node *node);
+  static void UpdateHeight(AvlTree::Node *node);
+  static int GetHeight(AvlTree::Node *node);
 };
 
 /**
  * @brief Rotation and balance operations class for AVL tree
  */
 class AvlTreeRotate {
- public:
-  static int CalculateBalanceFactor(AvlTree::Node* node);
-  static AvlTree::Node* FindUnbalancedNode(AvlTree::Node* node);
+public:
+  static int CalculateBalanceFactor(AvlTree::Node *node);
+  static AvlTree::Node *FindUnbalancedNode(AvlTree::Node *node);
 
-  static AvlTree::Node* RightRotate(AvlTree::Node* node);
-  static AvlTree::Node* LeftRotate(AvlTree::Node* node);
+  static AvlTree::Node *RightRotate(AvlTree::Node *node);
+  static AvlTree::Node *LeftRotate(AvlTree::Node *node);
 };
-
-/**
- * @brief Print tree visualization
- */
-void AvlTree::PrintTree() const {
-  cout << "\n=== Tree Visualization ===\n";
-  if (root_ == nullptr) {
-    cout << "Empty tree\n";
-    return;
-  }
-  PrintTreeRecursive(root_, "", true);
-  cout << "=======================\n";
-}
-
-/**
- * @brief Print tree structure recursively with formatting
- * @param node Current node to print
- * @param prefix String prefix for visual indentation
- * @param is_left Whether current node is a left child
- */
-void AvlTree::PrintTreeRecursive(Node* node, string prefix,
-                                 bool is_left) const {
-  if (node == nullptr) return;
-
-  cout << prefix;
-  cout << (is_left ? "--- " : "+-- ");
-
-  cout << node->data << " (h:" << node->height << ")"
-       << " (s:" << node->size << ")"
-       << " (d:" << AvlTreeMetrics::CalculateDepth(node) << ")"
-       << "\n";
-
-  string new_prefix = prefix + (is_left ? "|   " : "    ");
-
-  PrintTreeRecursive(node->left, new_prefix, true);
-  PrintTreeRecursive(node->right, new_prefix, false);
-}
 
 #endif

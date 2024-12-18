@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcommon_library.a CMakeFiles/common_library.dir/AvlTree/AvlTree.cpp.o CMakeFiles/common_library.dir/AvlTree/AvlTreeMetrics.cpp.o CMakeFiles/common_library.dir/AvlTree/AvlTreeRotate.cpp.o CMakeFiles/common_library.dir/AvlTree/AvlTreeUtils.cpp.o
+/usr/bin/ranlib libcommon_library.a

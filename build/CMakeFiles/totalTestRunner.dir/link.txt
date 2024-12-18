@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/totalTestRunner.dir/GoogleTest/total_test_runner.cc.o -o totalTestRunner  libcommon_library.a /usr/lib/x86_64-linux-gnu/libgtest.a -lpthread 
