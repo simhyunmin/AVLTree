@@ -1,4 +1,4 @@
-# AVL Tree Range Query Project
+# AVL Tree Project
 This project implements an AVL Tree in C++ to perform range queries efficiently. 
 The AVL tree is a self-balancing binary search tree (BST), where 
 the difference between heights of left and right subtrees cannot be more than one for all nodes. 
