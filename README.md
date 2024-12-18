@@ -5,17 +5,16 @@ the difference between heights of left and right subtrees cannot be more than on
 The tree supports insertion, deletion, and querying of elements within a given range.
 
 ## Table of Contents
-Project Summary
-Features
-Prerequisites
-Installation
-Usage
-Code Structure
-Example
-Efficiency
-Contributing
-License
-Project Summary
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Code Structure](#code-structure)
+- [Example Tasks](#example-tasks)
+- [Efficiency](#efficiency)
+
+
+## Project Summary
 This project aims to implement range query functionality based on an AVL tree. The AVL tree is characterized by its self-balancing property, ensuring that insertion, deletion, and search operations have a time complexity of O(log(n)). The project provides the following key functionalities:
 
 ## Features
@@ -51,82 +50,86 @@ git clone https://github.com/simhyunmin/INHA_OSAP_002_T6.git
 
 2. you will use 'cd' and go the project directory:
 ```bash
-cd avl-tree-range-query
+cd INHA_OSAP_002_T6
 ```
 
 3. Compile the code:
 ```bash
-g++ -o avl_tree main.cpp avl_tree.cpp
-Run the executable:
+g++ -o avl_tree OSAP_002_T6_source.cpp
 ```
-bash
 
-
+4. Run the executable:
+```bash
 ./avl_tree
-Usage
-The project demonstrates basic operations of the AVL Tree. After compiling and running, you will be prompted to insert, delete, or perform range queries.
+```
 
-Example Operations:
-Insert Element: Adds a new node to the AVL tree.
-Delete Element: Removes a node from the tree while keeping it balanced.
-Range Query: Returns all elements between two values (inclusive).
-Code Structure
-avl_tree.h: Header file containing the definition of the AVL Tree class.
-avl_tree.cpp: Implements the AVL Tree operations like insertion, deletion, and balancing.
-main.cpp: The main file to run and test the AVL Tree with example inputs.
-The key class and functions are:
+## Usage
+This project allows you to choose how many commands to execute for each test case, and It provides the basic functionalities of an AVL tree, as well as advanced features beyond the basics.
 
-Node: Represents a node in the AVL tree.
-insert(): Inserts a node and rebalances the tree.
-deleteNode(): Deletes a node and ensures balance.
-rangeQuery(): Returns all values between a given range.
-Example
-Here’s an example of how the project works:
+### Example Operations:
 
-cpp
+#### Example Tasks:
+- Input the number of test cases and the number of commands to be entered.
+- Element Insertion: Adds a new node to the AVL tree.
+- Element Deletion: Removes a node from the tree while maintaining balance.
 
+#### Code Structure:
 
-int main() {
-    AVLTree tree;
-    
-    tree.insert(10);
-    tree.insert(20);
-    tree.insert(30);
-    
-    tree.deleteNode(20);
-    
-    std::vector<int> result = tree.rangeQuery(5, 25);
-    
-    for (int val : result) {
-        std::cout << val << " ";
-    }
-    
-    return 0;
-}
-Expected Output:
+- **AvlTree Folder**: A folder containing the split files for implementing the AVL tree.
+- **OSAP_002_T6 Folder**: A cpp file that combines the split files into a single cpp file.
+- **OSAP_002_T6_source.cpp**: Implements AVL tree operations such as insertion, deletion, and balancing. You can run the AvlTree and input examples.
 
+#### Key Classes and Functions:
 
-10 30
-Efficiency
-Empty, Size, Height: O(1) time complexity.
-Other operations: Each has a time complexity of O(log(n)).
-Contributing
-Contributions are welcome! If you’d like to improve this project, feel free to fork the repository and submit a pull request.
+- **Node**: Represents a node in the AVL tree.
+- **insert()**: Inserts a node and maintains the balance of the tree.
+- **Erase()**: Deletes a node and keeps the balance.
 
-Fork the project.
-Create your feature branch:
-bash
+## Example
+how the project works:
 
+```shell
+1 17
+Height
+Height
+Height
+Empty
+Insert 157731
+Ancestor 157731
+Height
+Height
+Size
+Find 218367
+Average 157731
+Average 157731
+Find 254641
+Empty
+Average 157731
+Ancestor 157731
+Empty
+```
 
-git checkout -b feature/AmazingFeature
-Commit your changes:
-bash
+**Expected Output:**
 
-
-git commit -m 'Add AmazingFeature'
-Push to the branch:
-bash
-
-
-git push origin feature/AmazingFeature
-Open a pull request.
+```shell
+-1
+-1
+-1
+1
+1
+1 0
+1
+1
+1
+0
+157731
+157731
+0
+0
+157731
+1 0
+0
+```
+## Efficiency
+Empty, Size, Height operations are performed in O(1) time.
+The remaining operations are performed in O(log(n)) time.
