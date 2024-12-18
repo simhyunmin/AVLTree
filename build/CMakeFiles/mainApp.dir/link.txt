@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/mainApp.dir/AvlTree/main.cpp.o -o mainApp  libcommon_library.a 

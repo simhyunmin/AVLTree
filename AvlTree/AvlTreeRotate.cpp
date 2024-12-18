@@ -32,7 +32,7 @@ Date: 2024-11-20
  * @param node Target node
  * @return Balance factor (left height - right height)
  */
-int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node* node) {
+int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node *node) {
   if (node == nullptr) {
     return 0;
   }
@@ -47,7 +47,7 @@ int AvlTreeRotate::CalculateBalanceFactor(AvlTree::Node* node) {
  * @param node Starting node
  * @return Pointer to unbalanced node, nullptr if not found
  */
-AvlTree::Node* AvlTreeRotate::FindUnbalancedNode(AvlTree::Node* node) {
+AvlTree::Node *AvlTreeRotate::FindUnbalancedNode(AvlTree::Node *node) {
   if (node == nullptr) {
     return nullptr;
   }
@@ -65,9 +65,9 @@ AvlTree::Node* AvlTreeRotate::FindUnbalancedNode(AvlTree::Node* node) {
  * @param parent_node Rotation pivot node
  * @return New root after rotation
  */
-AvlTree::Node* AvlTreeRotate::RightRotate(AvlTree::Node* parent_node) {
-  AvlTree::Node* child = parent_node->left;
-  AvlTree::Node* child_right = child->right;
+AvlTree::Node *AvlTreeRotate::RightRotate(AvlTree::Node *parent_node) {
+  AvlTree::Node *child = parent_node->left;
+  AvlTree::Node *child_right = child->right;
 
   // Perform rotation
   child->right = parent_node;
@@ -110,9 +110,9 @@ AvlTree::Node* AvlTreeRotate::RightRotate(AvlTree::Node* parent_node) {
  * @param parent_node Rotation pivot node
  * @return New root after rotation
  */
-AvlTree::Node* AvlTreeRotate::LeftRotate(AvlTree::Node* parent_node) {
-  AvlTree::Node* child = parent_node->right;
-  AvlTree::Node* child_left = child->left;
+AvlTree::Node *AvlTreeRotate::LeftRotate(AvlTree::Node *parent_node) {
+  AvlTree::Node *child = parent_node->right;
+  AvlTree::Node *child_left = child->left;
 
   // Perform rotation
   child->left = parent_node;

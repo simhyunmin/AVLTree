@@ -27,8 +27,9 @@ Date: 2024-11-20
 
 #include "OSAP_002_T6_source.h"
 
-// Returns the depth (distance from root) of the given node by counting parent links
-int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
+// Returns the depth (distance from root) of the given node by counting parent
+// links
+int AvlTreeMetrics::CalculateDepth(AvlTree::Node *node) {
   int depth = 0;
   if (node == nullptr) {
     return 0;
@@ -42,18 +43,16 @@ int AvlTreeMetrics::CalculateDepth(AvlTree::Node* node) {
 }
 
 // Updates node's height as max height between left and right child plus 1
-void AvlTreeMetrics::UpdateHeight(AvlTree::Node* node) {
+void AvlTreeMetrics::UpdateHeight(AvlTree::Node *node) {
   if (node == nullptr) {
     return;
   }
-  node->height = 1 + std::max(
-    node->left ? GetHeight(node->left) : -1,
-    node->right ? GetHeight(node->right) : -1
-  );
+  node->height = 1 + std::max(node->left ? GetHeight(node->left) : 0,
+                              node->right ? GetHeight(node->right) : 0);
 }
 
 // Updates node's size as sum of left and right subtree sizes plus 1
-void AvlTreeMetrics::UpdateSize(AvlTree::Node* node) {
+void AvlTreeMetrics::UpdateSize(AvlTree::Node *node) {
   if (node == nullptr) {
     return;
   }
@@ -61,18 +60,17 @@ void AvlTreeMetrics::UpdateSize(AvlTree::Node* node) {
 }
 
 // Returns node's height, -1 for null node
-int AvlTreeMetrics::GetHeight(AvlTree::Node* node) {
+int AvlTreeMetrics::GetHeight(AvlTree::Node *node) {
   if (node == nullptr) {
-    return -1;
+    return 0;
   }
   return node->height;
 }
 
 // Returns node's size, 0 for null node
-int AvlTreeMetrics::GetSize(AvlTree::Node* node) {
+int AvlTreeMetrics::GetSize(AvlTree::Node *node) {
   if (node == nullptr) {
     return 0;
   }
   return node->size;
 }
-
