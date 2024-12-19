@@ -6,6 +6,7 @@ This project implements an AVL tree in C++ to efficiently perform rotations duri
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Code structure](#code-structure)
 - [Example Operations](#example-Operations)
 - [Example](#example)
 - [Efficiency](#efficiency)
@@ -65,18 +66,18 @@ g++ -o avl_tree OSAP_002_T6_source.cpp
 ## Usage
 This project allows you to choose how many commands to execute for each test case, and It provides the basic functionalities of an AVL tree, as well as advanced features beyond the basics.
 
+## Code Structure:
+
+- **AvlTree Folder**: A folder containing the split files for implementing the AVL tree.
+- **OSAP_002_T6 Folder**: A cpp file that combines the split files into a single cpp file.
+- **OSAP_002_T6_source.cpp**: Implements AVL tree operations such as insertion, deletion, and balancing. You can run the AvlTree and input examples.
+
 ## Example Operations:
 
 #### Example Tasks:
 - Input the number of test cases and the number of commands to be entered.
 - Element Insertion: Adds a new node to the AVL tree.
 - Element Deletion: Removes a node from the tree while maintaining balance.
-
-#### Code Structure:
-
-- **AvlTree Folder**: A folder containing the split files for implementing the AVL tree.
-- **OSAP_002_T6 Folder**: A cpp file that combines the split files into a single cpp file.
-- **OSAP_002_T6_source.cpp**: Implements AVL tree operations such as insertion, deletion, and balancing. You can run the AvlTree and input examples.
 
 #### Key Classes and Functions:
 
