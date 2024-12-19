@@ -7,7 +7,7 @@ This project implements an AVL tree in C++ to efficiently perform rotations duri
 - [Installation](#installation)
 - [Usage](#usage)
 - [Code Structure](#code-structure)
-- [Example Operations:](#exampleOperations)
+- [Example Operations:](#example Operations)
 - [Efficiency](#efficiency)
 
 
