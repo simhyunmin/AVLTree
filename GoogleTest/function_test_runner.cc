@@ -1,3 +1,29 @@
+/*
+MIT License
+
+Copyright (c) 2024 INHA_OSAP_002_T6
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Author: INHA_OSAP_002_T6
+Date: 2024-11-20
+*/
 #include <gtest/gtest.h>
 
 #include <iostream>
@@ -7,6 +33,9 @@
 
 #include "../AvlTree/OSAP_002_T6_source.h"
 
+/**
+ * @brief Implementation TestFixture for AVL Tree
+ */
 class AvlTreeTestFixture : public testing::Test {
  public:
   AvlTreeTestFixture();
@@ -51,14 +80,19 @@ void AvlTreeTestFixture::SetUp() {
 
 void AvlTreeTestFixture::TearDown() { std::cout.rdbuf(original_buffer_); }
 
-// Test Find
+/**
+ * @brief Test for Find
+ */
 TEST_F(AvlTreeTestFixture, TestFind) {  //** */
   for (int i = 1; i < 8; i++) tree_.Find(i);
   std::string saved_output = total_output_.str();
   ASSERT_EQ("3\n3\n3\n3\n3\n3\n3\n", saved_output);
 }
 
-// Test Empty
+
+/**
+ * @brief Test for Empty
+ */
 TEST_F(AvlTreeTestFixture, TestEmpty) {  //*
   tree_.Empty();
   emptyTree_.Empty();
@@ -66,7 +100,9 @@ TEST_F(AvlTreeTestFixture, TestEmpty) {  //*
   ASSERT_EQ("0\n1\n", saved_output);
 }
 
-// Test Size
+/**
+ * @brief Test for Size
+ */
 TEST_F(AvlTreeTestFixture, TestSize) {  //*
   tree_.Size();
   emptyTree_.Size();
@@ -74,7 +110,9 @@ TEST_F(AvlTreeTestFixture, TestSize) {  //*
   ASSERT_EQ("7\n0\n", saved_output);
 }
 
-// Test Height
+/**
+ * @brief Test for Height
+ */
 TEST_F(AvlTreeTestFixture, TestHeight) {  //*
   tree_.Height();
   emptyTree_.Height();
@@ -82,21 +120,27 @@ TEST_F(AvlTreeTestFixture, TestHeight) {  //*
   ASSERT_EQ("3\n-1\n", saved_output);
 }
 
-// Test Ancestor
+/**
+ * @brief Test for Ancestor
+ */
 TEST_F(AvlTreeTestFixture, TestAncestor) {  //*
   tree_.Ancestor(4);
   std::string saved_output = total_output_.str();
   ASSERT_EQ("3 0\n", saved_output);
 }
 
-// Test Average
+/**
+ * @brief Test for Average
+ */
 TEST_F(AvlTreeTestFixture, TestAverage) {  //*
   tree_.Average(4);
   std::string saved_output = total_output_.str();
   ASSERT_EQ("4\n", saved_output);
 }
 
-// Test Rank Operations
+/**
+ * @brief Test for Rank
+ */
 TEST_F(AvlTreeTestFixture, TestRank) {  //*
   tree_.Rank(1);
   tree_.Rank(8);
@@ -107,12 +151,17 @@ TEST_F(AvlTreeTestFixture, TestCalculateRank) {  //*
   ASSERT_EQ(3, tree_.CalculateRank(tree_.getRoot(), 3));
 }
 
-// Test Path Calculations
+/**
+ * @brief Test for GetPathToRootSum
+ */
 TEST_F(AvlTreeTestFixture, TestGetPathToRootSum) {  //*
   EXPECT_EQ(7, AvlTreeUtils::GetPathToRootSum(
                    AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 1)));
 }
 
+/**
+ * @brief Test for GetSize
+ */
 TEST_F(AvlTreeTestFixture, TestGetSize) {  //*
   EXPECT_EQ(7, AvlTreeMetrics::GetSize(
                    AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 4)));
@@ -121,7 +170,9 @@ TEST_F(AvlTreeTestFixture, TestGetSize) {  //*
                    AvlTreeUtils::FindNodeByValue(emptyTree_.getRoot(), 4)));
 }
 
-// Test Height and Depth Operations
+/**
+ * @brief Test for CalculateDepth
+ */
 TEST_F(AvlTreeTestFixture, TestCalculateDepth) {  //*
   EXPECT_EQ(0, AvlTreeMetrics::CalculateDepth(
                    AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 4)));
@@ -129,6 +180,9 @@ TEST_F(AvlTreeTestFixture, TestCalculateDepth) {  //*
   EXPECT_EQ(0, AvlTreeMetrics::CalculateDepth(nullptr));
 }
 
+/**
+ * @brief Test for GetHeight
+ */
 TEST_F(AvlTreeTestFixture, TestGetHeight) {  //*
   EXPECT_EQ(3, AvlTreeMetrics::GetHeight(
                    AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 4)));
@@ -136,14 +190,19 @@ TEST_F(AvlTreeTestFixture, TestGetHeight) {  //*
   EXPECT_EQ(0, AvlTreeMetrics::GetHeight(nullptr));
 }
 
-// Test Balance Analysis
+
+/**
+ * @brief Test for CalculateBalanceFactor
+ */
 TEST_F(AvlTreeTestFixture, TestCalculateBalanceFactor) {  //*
   EXPECT_EQ(0, AvlTreeRotate::CalculateBalanceFactor(
                    AvlTreeUtils::FindNodeByValue(tree_.getRoot(), 1)));
   EXPECT_EQ(0, AvlTreeRotate::CalculateBalanceFactor(nullptr));
 }
 
-// Test Insert
+/**
+ * @brief Test for Insert
+ */
 TEST_F(AvlTreeTestFixture, TestInsert) {
   // 이미 있는 값을 줬을때
   tree_.Insert(1);
@@ -182,7 +241,9 @@ TEST_F(AvlTreeTestFixture, TestInsert) {
       saved_output);
 }
 
-// Test Erase
+/**
+ * @brief Test for Erase
+ */
 TEST_F(AvlTreeTestFixture, TestErase) {
   0, tree_.Erase(1000);
   AvlTree treeForTestEraseLL;
@@ -228,6 +289,9 @@ TEST_F(AvlTreeTestFixture, TestErase) {
       saved_output);
 }
 
+/**
+ * @brief Main function starting all tests
+ */
 int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
