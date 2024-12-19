@@ -8,6 +8,7 @@ This project implements an AVL tree in C++ to efficiently perform rotations duri
 - [Usage](#usage)
 - [Code Structure](#code-structure)
 - [Example Operations](#example-Operations)
+- [Example](#example)
 - [Efficiency](#efficiency)
 
 
@@ -65,7 +66,7 @@ g++ -o avl_tree OSAP_002_T6_source.cpp
 ## Usage
 This project allows you to choose how many commands to execute for each test case, and It provides the basic functionalities of an AVL tree, as well as advanced features beyond the basics.
 
-### Example Operations:
+## Example Operations:
 
 #### Example Tasks:
 - Input the number of test cases and the number of commands to be entered.
