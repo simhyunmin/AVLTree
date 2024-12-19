@@ -8,7 +8,6 @@ This project implements an AVL tree in C++ to efficiently perform rotations duri
 - [Usage](#usage)
 - [Code structure](#code-structure)
 - [Example Operations](#example-Operations)
-- [Example](#example)
 - [Efficiency](#efficiency)
 
 
@@ -85,7 +84,7 @@ This project allows you to choose how many commands to execute for each test cas
 - **insert()**: Inserts a node and maintains the balance of the tree.
 - **Erase()**: Deletes a node and keeps the balance.
 
-## Example
+#### Example
 how the project works:
 
 ```shell
