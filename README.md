@@ -38,8 +38,7 @@ To run this project
 #### following:
 - A C++ compiler (such as GCC or Clang)
 - Familiarity with command line operations
-- An Integrated Development Environment (IDE) like Visual Studio Code, 
-- CLion, or any other suitable C++ development platform
+- An Integrated Development Environment (IDE) like CLion, Eclipse, or any other suitable C++ development platform
 
 ## Installation
 
