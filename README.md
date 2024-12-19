@@ -130,5 +130,5 @@ Empty
 0
 ```
 ## Efficiency
-Empty, Size, Height operations are performed in O(1) time.
-The remaining operations are performed in O(log(n)) time.
+- Empty, Size, Height operations are performed in O(1) time.
+- The remaining operations are performed in O(log(n)) time.
