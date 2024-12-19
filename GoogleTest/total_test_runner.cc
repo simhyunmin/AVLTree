@@ -33,6 +33,9 @@ Date: 2024-11-20
 
 #include "../AvlTree/OSAP_002_T6_source.h"
 
+/**
+ * @brief Test that testing all funtion at least once 
+ */
 TEST(AvlTreeTest, TotalTest) {
   AvlTree tree_;
   std::ostringstream total_output_;
@@ -283,7 +286,9 @@ TEST(AvlTreeTest, TotalTest) {
   std::cout.rdbuf(original_buffer_);
 }
 
-////////////
+/**
+ * @brief Main function starting the test
+ */
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
